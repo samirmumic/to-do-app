@@ -1,0 +1,22 @@
+@media all {
+	body {
+		font-family: centurygothic; 
+	}
+	h1 {
+		font-size: 120px;
+		font-weight: bolder;
+		text-align: center;
+		color: #ff3f57;
+	}
+	h3 {
+			font-size: 40px;
+			font-weight: bolder;
+			text-align: center;
+			color: #ff3f57;
+	}
+	.masked{
+		background: url(/assets/img/red.jpg) repeat, white;
+		-webkit-text-fill-color: transparent;
+		-webkit-background-clip: text;
+	}
+}
