@@ -21,6 +21,8 @@
 		init: function ($ctx, sandbox, modId) {
 			// call base constructor
 			this._super($ctx, sandbox, modId);
+			
+			this.sandbox.subscribe('myTodoChannel', this); // subscribe to the VIP channel
 		},
 
 		/**
@@ -31,23 +33,34 @@
 		 * @return void
 		 */
 		on: function (callback) {
+			
+			
 
-			// Per jQuery Button Selektieren
-			// On Click Event abfangen
-			// console.log(text aus dem inputfeld)
-
-			var $button = $(".inputcreate"),
-				$inputval = $('.inputtxt'),
+			var mod = this,
+				$button = $('.inputcreate', this.$ctx),
+				$inputtxt = $('.inputtxt', this.$ctx),
 				$todobox = $('.mod-to-do-item-template'),
 				$inputcheck = $('.inputcheck');
 
-
+		
+			
 			$button.on('click', function (e) {
+				
 				e.preventDefault();
+				
 				// Die Variable valofinput wird mit dem Value vom Inputfeld abgefüllt
-				var $valofinput = $inputval.val();
-				console.log($valofinput);
-				$todobox.clone().prependTo(".mod-to-do-box").addClass("show").append($valofinput);
+				var valInput = $inputtxt.val();
+				
+				// fire event to another module
+				mod.fire('addTodo', { text : valInput }, ['myTodoChannel'], function() { 
+					
+					console.log('Fired!'); 
+				
+				});
+				
+				
+				console.log(valInput);
+				$todobox.clone().prependTo(".mod-to-do-box").addClass("show").append(valInput);
 			});
 
 
@@ -61,6 +74,8 @@
 		 * @return void
 		 */
 		after: function () {
+			
+			
 		}
 	});
 })(Tc.$);
