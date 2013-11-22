@@ -1,6 +1,8 @@
-@media all {
+
+	
+
 	body {
-		font-family: centurygothic; 
+		font-family: 'Roboto'; 
 	}
 	h1 {
 		font-size: 120px;
@@ -8,6 +10,7 @@
 		text-align: center;
 		color: #ff3f57;
 	}
+	
 	h3 {
 			font-size: 40px;
 			font-weight: bolder;
@@ -19,4 +22,22 @@
 		-webkit-text-fill-color: transparent;
 		-webkit-background-clip: text;
 	}
-}
+	
+	
+	@media (max-width: 680px) {
+					
+		h1 {
+			font-size: 60px;
+		}
+	}
+	
+	@media (max-width: 440px) {
+						
+		h1 {
+			font-size: 40px;
+		}
+		
+		h3 {
+			font-size: 30px;
+		}
+	}

@@ -1,0 +1,40 @@
+.mod-to-do-item-template {	
+	display: none;
+	
+	.box {
+		height: 50px;
+		margin-bottom: 15px;
+		padding: 5px 10px;
+		background:white;
+		border: 7px solid #e8e8e8;
+		border-radius: 5px;
+		transition: border-color 0.6s ease;
+		overflow: hidden;
+		white-space: nowrap;
+		&:first-child {
+			margin-top: 15px;
+		}
+		&:hover {
+				border: 7px solid #c6c6c6;
+		}
+	}
+	
+		.item-content  {
+			padding-top: 15px;
+			font-size: 14px;
+			text-overflow: ellipsis;
+			width: 100%;
+						    
+			white-space: nowrap;
+			overflow: hidden;
+		}		
+		
+			.inputcheck {
+				margin: 5px 25px 0px 20px;
+			}
+			
+			.item-label {
+				cursor: pointer;
+			}
+			
+}
