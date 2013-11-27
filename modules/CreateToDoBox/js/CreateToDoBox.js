@@ -38,12 +38,8 @@
 
 			var mod = this,
 				$button = $('.inputcreate', this.$ctx),
-				$inputtxt = $('.inputtxt', this.$ctx),
-				$todobox = $('.mod-to-do-item-template'),
-				$inputcheck = $('.inputcheck');
+				$inputtxt = $('.inputtxt', this.$ctx);
 
-		
-			
 			$button.on('click', function (e) {
 				
 				e.preventDefault();
@@ -54,18 +50,14 @@
 				// fire event to another module
 				mod.fire('addTodo', { text : valInput }, ['myTodoChannel'], function() { 
 					
-					console.log('Fired!'); 
+//					console.log('Fired!'); 
 				
-				});
-				
-				
-				console.log(valInput);
-				$todobox.clone().prependTo(".mod-to-do-box").addClass("show").append(valInput);
-			});
-
+				});							   
+			});			
 
 			callback();
 		},
+		
 
 		/**
 		 * Hook function to trigger your events.
