@@ -33,19 +33,68 @@
 		 * @return void
 		 */
 		on: function (callback) {
+			
+//			var  $label = $('.item-label', $template)
+//				,$checkbox = $('.inputcheck', $template)
+//			;
+			
+			
+			//
+			// Toggle Done / Not Done
+			
+			this.$ctx.on('click','.mod-to-do-item', function(ev) {
+				
+				var $item = $(ev.target);
+				
+				if($item.hasClass('mod-to-do-item') == false) {
+					$item = $item.closest('.mod-to-do-item'); 
+				}
+				
+				$item.toggleClass('skin-to-do-item-template-checked');
+								
+				var checkboxState = $item.find('.inputcheck').attr('checked');
+				
+				if(checkboxState == true) {
+					$checkbox.attr('checked', false); 	
+				} else {
+					$checkbox.attr('checked', true);
+				}
+				
+				
+			});
+		
+			
+			//
+			// Rename Todo
+			
+//			$label.on('dblclick', function () {
+//				
+//				var $inputfield = $('<input class="edit-inputfield" />');
+//				
+//				$label
+//					.hide()	
+//				    .after($inputfield)
+//				;
+//				
+//				$inputfield.val($label.text());
+//						
+//			});
 
 			callback();
 		},
+		
+		
+		//
+		// Listener for adding a new todo item
 
 		onAddTodo: function (data) {
 
 			// Template suchen per jQuery & clonen
-			var $template = $('.mod-to-do-item-template', this.$ctx).clone()
-				, $label = $('.item-label', $template)
-				, $box = $('.mod-to-do-item')
-				, $checkbox = $('.inputcheck', $template)
-				;
+			var  $template = $('.mod-to-do-item-template', this.$ctx).clone()
+				,$label = $('.item-label', $template)				
+			;
 
+			// Rename class because it is not a templste anymore
 			$template.attr('class', 'mod-to-do-item');
 
 			// Wert einfügen in das Template
@@ -53,24 +102,7 @@
 
 			// Template anzeigen auf der Seite
 			$template.prependTo(this.$ctx).fadeIn();
-
-			$checkbox.on('click', function () {
-				$(this).closest(".mod-to-do-item").toggleClass("skin-to-do-item-template-checked");
-
-			});
-			$label.on('click', function () {
-				$(this).closest(".mod-to-do-item").toggleClass("skin-to-do-item-template-checked");
-
-			});
-
 		},
-
-		// 1. Debugge Add Todo
-
-		// 2. Remove Todo
-
-		// 3. Bearbeiten
-
 
 		/**
 		 * Hook function to trigger your events.
