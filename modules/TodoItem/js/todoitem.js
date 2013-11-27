@@ -7,7 +7,7 @@
 	 * @class Default
 	 * @extends Tc.Module
 	 */
-	Tc.Module.CreateToDoBox = Tc.Module.extend({
+	Tc.Module.TodoItem = Tc.Module.extend({
 
 		/**
 		 * Initializes the Default module.
@@ -21,8 +21,6 @@
 		init: function ($ctx, sandbox, modId) {
 			// call base constructor
 			this._super($ctx, sandbox, modId);
-			
-			this.sandbox.subscribe('myTodoChannel', this); // subscribe to the VIP channel
 		},
 
 		/**
@@ -33,31 +31,41 @@
 		 * @return void
 		 */
 		on: function (callback) {
-			
-			
 
-			var mod = this,
-				$button = $('.inputcreate', this.$ctx),
-				$inputtxt = $('.inputtxt', this.$ctx);
+			var  self = this
+				,$ctx = this.$ctx
+				,$label = $('.item-label', this.$ctx)
+				,$checkbox = $('.item-checkbox', this.$ctx)
+				,$editInputHtml = $('<input class="edit-inputfield" />')
+			;
 
-			$button.on('click', function (e) {
+			// Toggle item state
+			$ctx.on('click', function() {				
+
+				$ctx.toggleClass('skin-todo-item-checked');																	
+
+				// TODO: This doesn't work. Try to figure out a way to toggle the checkboy state chcked / unchecked
+				$checkbox.attr('checked', !$checkbox.attr('checked'));
+			});		
+			
+			//
+			// Rename Todo
+			
+			$label.on('dblclick', function() {
+
+				$label
+					.hide()	
+				    .after($editInputHtml)
+				;
 				
-				e.preventDefault();
-				
-				// Die Variable valofinput wird mit dem Value vom Inputfeld abgefüllt
-				var valInput = $inputtxt.val();
-				
-				// fire event to another module
-				mod.fire('addTodo', { text : valInput }, ['myTodoChannel'], function() { 
-					
-//					console.log('Fired!'); 
-				
-				});							   
-			});			
+				$editInputHtml
+					.val($label.text())
+					.focus()
+				;					
+			});
 
 			callback();
-		},
-		
+		},		
 
 		/**
 		 * Hook function to trigger your events.
@@ -66,8 +74,6 @@
 		 * @return void
 		 */
 		after: function () {
-			
-			
 		}
 	});
 })(Tc.$);
