@@ -40,7 +40,9 @@
 			;
 
 			// Toggle item state
-			$ctx.on('click', function(ev) {	
+			$ctx.on('click', function(ev) {
+
+				// TODO: Do not proceed if we are edit-in-progress
 
 				$ctx.toggleClass('skin-todo-item-checked');																	
 
