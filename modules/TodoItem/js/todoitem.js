@@ -32,16 +32,18 @@
 		 */
 		on: function (callback) {
 
-			var  self = this
-				,$ctx = this.$ctx
-				,$label = $('.item-label', this.$ctx)
-				,$checkbox = $('.item-checkbox', this.$ctx)
-				,$editInputHtml = $('.edit-inputfield')
-			;
+			var $ctx = this.$ctx
+				, $label = $('.item-label', this.$ctx)
+				, $checkbox = $('.item-checkbox', this.$ctx)
+				, $editInputHtml = $('.edit-inputfield', this.$ctx)
+				, skinNameEdit = 'skin-todo-item-edit'
+				, skinNameChecked = 'skin-todo-item-checked'
+				;
 
 			// Toggle item state
 			$checkbox.on('click', function (ev) {
-				$ctx.toggleClass('skin-todo-item-checked');
+
+				$ctx.toggleClass(skinNameChecked);
 			});
 
 
@@ -49,34 +51,47 @@
 			// Rename To do Item
 
 			// Start Editing: Replace Label with Inputfield
-			$label.on('dblclick', function () {
-				
-				if($ctx.hasClass('skin-todo-item-checked')) return;
-				
-				$ctx.addClass('skin-todo-item-edit');
+			$label.on('dblclick', function (ev) {
 
-				$label
-					.hide()					
-				;
+
+				// Sortable jQuery sortable
+
+				if ($ctx.hasClass(skinNameChecked)) return;
+
+				$ctx.addClass(skinNameEdit);
+
+				$label.hide();
 
 				$editInputHtml
 					.val($label.text())
 					.show()
-					.focus()
+					.select()
 				;
+
+
+			});
+
+			// Edit abbrechen mit ESC
+			$(document).keyup(function (e) {
+				if (e.keyCode == 27) {
+					$('.edit-inputfield').focusout();
+				}  
 			});
 
 			// Stop Editing: Replace Inputfield with Label
-			$editInputHtml.on('focusout', function () {
+			$editInputHtml.on('focusout', function (ev) {
 
 				var val = $editInputHtml.val();
-				
+
 				$editInputHtml.hide();
 				$label.html(val).show();
-				
-				self.$ctx.removeClass('skin-todo-item-edit');
+
+				$ctx.removeClass(skinNameEdit);
 			});
-	
+			
+			    $( ".mod-todo-list" ).sortable();
+			    $( ".mod-todo-list" ).disableSelection();
+			
 			callback();
 		},
 
