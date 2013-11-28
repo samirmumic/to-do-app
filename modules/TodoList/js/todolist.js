@@ -40,7 +40,7 @@
 		
 		
 		//
-		// Listener for adding a new todo item
+		// Listener for adding a new To do item
 
 		onAddTodo: function (data) {
 			
@@ -59,6 +59,8 @@
 
 			// Start module			
 			this.sandbox.addModules($newItem.wrap('<div></div>').parent());
+
+			$newItem.unwrap();
 		},
 
 		/**

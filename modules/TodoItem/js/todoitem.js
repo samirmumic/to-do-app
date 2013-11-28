@@ -40,18 +40,26 @@
 			;
 
 			// Toggle item state
-			$ctx.on('click', function() {				
+			$ctx.on('click', function(ev) {	
 
 				$ctx.toggleClass('skin-todo-item-checked');																	
 
-				// TODO: This doesn't work. Try to figure out a way to toggle the checkboy state chcked / unchecked
-				$checkbox.attr('checked', !$checkbox.attr('checked'));
+				// Check / Uncheck the Checkbox
+				if($ctx.hasClass('skin-todo-item-checked')) {					
+					$checkbox.prop('checked', true);
+				} else {					
+					$checkbox.prop('checked', false);
+				}
 			});		
 			
+
 			//
-			// Rename Todo
+			// Rename To do Item
 			
+			// Start Editing: Replace Label with Inputfield
 			$label.on('dblclick', function() {
+
+				self.$ctx.addClass('edit-in-progress');
 
 				$label
 					.hide()	
@@ -62,6 +70,15 @@
 					.val($label.text())
 					.focus()
 				;					
+			});
+
+			// Stop Editing: Replace Inputfield with Label
+			$editInputHtml.on('focusout', function() {
+
+				self.$ctx.removeClass('edit-in-progress');
+				
+				// TODO: Stop Editing and show the new Item Title
+							
 			});
 
 			callback();

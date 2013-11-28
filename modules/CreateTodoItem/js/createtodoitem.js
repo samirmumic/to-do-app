@@ -7,7 +7,7 @@
 	 * @class Default
 	 * @extends Tc.Module
 	 */
-	Tc.Module.CreateTodo = Tc.Module.extend({
+	Tc.Module.CreateTodoItem = Tc.Module.extend({
 
 		/**
 		 * Initializes the Default module.
