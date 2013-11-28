@@ -45,17 +45,17 @@
 		onAddTodo: function (data) {
 			
 			var  $newItem = $('.skin-todo-item-template', this.$ctx).clone()
-				,$todoTextItem = $('.item-label', $newItem)				
+				,$todoTextItem = $newItem.find('.item-label')			
 			;
-
-			// Remove Template Class
-			$newItem.removeClass('skin-todo-item-template');
-
+			
 			// Insert To do text
 			$todoTextItem.html(data.text);
 
 			// Prepend new To do item
 			$newItem.prependTo(this.$ctx).fadeIn();
+			
+			// Remove Template Class
+			$newItem.removeClass('skin-todo-item-template');
 
 			// Start module			
 			this.sandbox.addModules($newItem.wrap('<div></div>').parent());

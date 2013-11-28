@@ -1,13 +1,12 @@
-
-.mod-todo-item {	
+.mod-todo-item {
 
 	cursor: pointer;
-	
+
 	.box {
 		height: 50px;
 		margin-bottom: 15px;
 		padding: 5px 10px;
-		background:white;
+		background: white;
 		border: 7px solid #e8e8e8;
 		border-radius: 5px;
 		transition: border-color 0.6s ease;
@@ -17,26 +16,32 @@
 			margin-top: 15px;
 		}
 		&:hover {
-				border: 7px solid #c6c6c6;
+			border: 7px solid #c6c6c6;
 		}
 	}
-	
-		.item-content  {
-			padding-top: 15px;
-			font-size: 14px;
-			text-overflow: ellipsis;
-			width: 100%;
-						    
-			white-space: nowrap;
-			overflow: hidden;
-		}		
-		
-			.item-checkbox {
-				margin: 5px 25px 0px 20px;
-			}
-			
-			.item-label {
-				cursor: pointer;
-			}
-			
+
+	.item-content {
+		padding-top: 15px;
+		font-size: 14px;
+		text-overflow: ellipsis;
+		width: 100%;
+
+		white-space: nowrap;
+		overflow: hidden;
+	}
+
+	.item-checkbox {
+		margin: 5px 25px 0px 20px;
+	}
+
+	.item-label {
+		cursor: pointer;
+	}
+
+	.edit-inputfield {
+		display: none;
+		padding: 2px 0px 2px 5px;
+		background-color: white;
+		border: 1px solid #e8e8e8;
+	}
 }

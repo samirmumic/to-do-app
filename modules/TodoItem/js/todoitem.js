@@ -36,55 +36,49 @@
 				,$ctx = this.$ctx
 				,$label = $('.item-label', this.$ctx)
 				,$checkbox = $('.item-checkbox', this.$ctx)
-				,$editInputHtml = $('<input class="edit-inputfield" />')
+				,$editInputHtml = $('.edit-inputfield')
 			;
 
 			// Toggle item state
-			$ctx.on('click', function(ev) {
+			$checkbox.on('click', function (ev) {
+				$ctx.toggleClass('skin-todo-item-checked');
+			});
 
-				// TODO: Do not proceed if we are edit-in-progress
-
-				$ctx.toggleClass('skin-todo-item-checked');																	
-
-				// Check / Uncheck the Checkbox
-				if($ctx.hasClass('skin-todo-item-checked')) {					
-					$checkbox.prop('checked', true);
-				} else {					
-					$checkbox.prop('checked', false);
-				}
-			});		
-			
 
 			//
 			// Rename To do Item
-			
-			// Start Editing: Replace Label with Inputfield
-			$label.on('dblclick', function() {
 
-				self.$ctx.addClass('edit-in-progress');
+			// Start Editing: Replace Label with Inputfield
+			$label.on('dblclick', function () {
+				
+				if($ctx.hasClass('skin-todo-item-checked')) return;
+				
+				$ctx.addClass('skin-todo-item-edit');
 
 				$label
-					.hide()	
-				    .after($editInputHtml)
+					.hide()					
 				;
-				
+
 				$editInputHtml
 					.val($label.text())
+					.show()
 					.focus()
-				;					
+				;
 			});
 
 			// Stop Editing: Replace Inputfield with Label
-			$editInputHtml.on('focusout', function() {
+			$editInputHtml.on('focusout', function () {
 
-				self.$ctx.removeClass('edit-in-progress');
+				var val = $editInputHtml.val();
 				
-				// TODO: Stop Editing and show the new Item Title
-							
+				$editInputHtml.hide();
+				$label.html(val).show();
+				
+				self.$ctx.removeClass('skin-todo-item-edit');
 			});
-
+	
 			callback();
-		},		
+		},
 
 		/**
 		 * Hook function to trigger your events.
