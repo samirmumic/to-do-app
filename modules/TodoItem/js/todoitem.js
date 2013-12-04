@@ -31,7 +31,9 @@
 		 * @return void
 		 */
 		on: function (callback) {
-
+//			this.$ctx.find('.item-label');
+			
+			
 			var $ctx = this.$ctx
 				, $label = $('.item-label', this.$ctx)
 				, $checkbox = $('.item-checkbox', this.$ctx)
@@ -39,23 +41,18 @@
 				, skinNameEdit = 'skin-todo-item-edit'
 				, skinNameChecked = 'skin-todo-item-checked'
 				;
-
+			 
 			// Toggle item state
 			$checkbox.on('click', function (ev) {
 
 				$ctx.toggleClass(skinNameChecked);
 			});
-
-
-			//
-			// Rename To do Item
-
+			
 			// Start Editing: Replace Label with Inputfield
-			$label.on('dblclick', function (ev) {
+			$label.on('dblclick', function () {
 
 
 				// Sortable jQuery sortable
-
 				if ($ctx.hasClass(skinNameChecked)) return;
 
 				$ctx.addClass(skinNameEdit);
@@ -73,8 +70,11 @@
 
 			// Edit abbrechen mit ESC
 			$(document).keyup(function (e) {
+				
+				if($ctx.hasClass(skinNameEdit) == false) return;
+				
 				if (e.keyCode == 27) {
-					$('.edit-inputfield').focusout();
+					$editInputHtml.focusout();
 				}  
 			});
 
@@ -88,12 +88,13 @@
 
 				$ctx.removeClass(skinNameEdit);
 			});
-			
-			    $( ".mod-todo-list" ).sortable();
-			    $( ".mod-todo-list" ).disableSelection();
+
+			var $list = $(".mod-todo-list");
+			$list.sortable();
+			$list.disableSelection();
 			
 			callback();
-		},
+		},				
 
 		/**
 		 * Hook function to trigger your events.

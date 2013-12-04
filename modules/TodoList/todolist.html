@@ -1,1 +1,12 @@
 <?php module('TodoItem', 'template', 'template') ?>
+
+<script id="todoitem" type="text/x-dot-template">
+	<div class="mod mod-todo-item skin-mod-todo-item">
+		<div class="box">
+			<p class="item-content">
+				<input class="item-checkbox" type="checkbox" id="input-text"><label class="item-label">{{=it.title}}</label>
+				<input class="edit-inputfield" />
+			</p>
+		</div>
+	</div>
+</script> 

@@ -34,8 +34,38 @@
 		 * @return void
 		 */
 		on: function (callback) {
+			this.tmplItem = doT.template($('#todoitem').text());
+			
+			this.getLocalStorageData();
 
 			callback();
+		},
+		
+		
+		setLocalStorageData: function() {
+			
+			var $items = $('.mod-todo-list').html();
+			localStorage.setItem('todoitems', $items);
+			
+		},
+		
+		getLocalStorageData: function() {
+								
+			// Check localstorage support via modernizr
+			if($('html').hasClass('localstorage')) {									
+				
+				var todoItems = localStorage.getItem('todoitems');
+				
+				if(todoItems !== null) {
+					this.$ctx.html(todoItems);	
+				}
+				
+				
+			} else {
+				
+				console.log(false);
+			}
+			
 		},
 		
 		
@@ -44,13 +74,18 @@
 
 		onAddTodo: function (data) {
 			
-			var  $newItem = $('.skin-todo-item-template', this.$ctx).clone()
-				,$todoTextItem = $newItem.find('.item-label')			
-			;
+			//var  $newItem = $('.skin-todo-item-template', this.$ctx).clone();
 			
-			// Insert To do text
-			$todoTextItem.html(data.text);
-
+			var datum = {
+				title: data.text
+			};
+			var html = this.tmplItem(datum);
+			
+			var $newItem = $(html);
+			
+			
+			console.log(datum);
+			
 			// Prepend new To do item
 			$newItem.prependTo(this.$ctx).fadeIn();
 			
@@ -61,6 +96,8 @@
 			this.sandbox.addModules($newItem.wrap('<div></div>').parent());
 
 			$newItem.unwrap();
+			
+			this.setLocalStorageData();
 		},
 
 		/**
