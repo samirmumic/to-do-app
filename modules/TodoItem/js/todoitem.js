@@ -31,7 +31,6 @@
 		 * @return void
 		 */
 		on: function (callback) {
-//			this.$ctx.find('.item-label');
 			
 			
 			var $ctx = this.$ctx
@@ -47,12 +46,12 @@
 
 				$ctx.toggleClass(skinNameChecked);
 			});
+			console.log($label);
 			
 			// Start Editing: Replace Label with Inputfield
+			
 			$label.on('dblclick', function () {
-
-
-				// Sortable jQuery sortable
+					console.log('dblc');
 				if ($ctx.hasClass(skinNameChecked)) return;
 
 				$ctx.addClass(skinNameEdit);

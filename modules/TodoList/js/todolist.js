@@ -21,6 +21,8 @@
 		init: function ($ctx, sandbox, modId) {
 			// call base constructor
 			this._super($ctx, sandbox, modId);
+			
+			this.itemsdata = [];
 
 			// subscribe to the channel
 			this.sandbox.subscribe('myTodoChannel', this);
@@ -44,28 +46,38 @@
 		
 		setLocalStorageData: function() {
 			
-			var $items = $('.mod-todo-list').html();
-			localStorage.setItem('todoitems', $items);
+			localStorage.setItem('itemsdata', this.itemsdata);
 			
 		},
 		
 		getLocalStorageData: function() {
-								
-			// Check localstorage support via modernizr
-			if($('html').hasClass('localstorage')) {									
-				
-				var todoItems = localStorage.getItem('todoitems');
-				
-				if(todoItems !== null) {
-					this.$ctx.html(todoItems);	
-				}
-				
-				
-			} else {
-				
-				console.log(false);
+			this.itemsdata = localStorage.getItem('itemsdata');
+			
+			var i,
+				l = this.itemsdata.length
+			;
+			for(i = 0; i < l; i++) {
+				var datum = this.itemsdata[i];
+				this.createItemInView(datum);
 			}
 			
+			
+//			// Check localstorage support via modernizr
+//			if($('html').hasClass('localstorage')) {									
+//				
+//				var $todoItems = $(localStorage.getItem('todoitems'));
+//				
+//				if ($todoItems !== null) {
+//					this.$ctx.html($todoItems);	
+//					this.sandbox.addModules($todoItems.wrap('<div></div>').parent());
+//				}
+//				
+//				
+//			} else {
+//				
+//				console.log(false);
+//			}
+//			
 		},
 		
 		
@@ -77,8 +89,35 @@
 			//var  $newItem = $('.skin-todo-item-template', this.$ctx).clone();
 			
 			var datum = {
-				title: data.text
+				title: data.text,
+				id: this.genId()
+				
 			};
+			
+			this.itemsdata.push(datum);
+
+			this.createItemInView(datum);
+
+			this.setLocalStorageData();
+		},
+
+		/**
+		 * Hook function to trigger your events.
+		 *
+		 * @method after
+		 * @return void
+		 */
+		after: function () {
+		},
+		
+		genId: function() {
+			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+			    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+			    return v.toString(16);
+			});
+		},
+		
+		createItemInView: function(datum) {
 			var html = this.tmplItem(datum);
 			
 			var $newItem = $(html);
@@ -96,17 +135,7 @@
 			this.sandbox.addModules($newItem.wrap('<div></div>').parent());
 
 			$newItem.unwrap();
-			
-			this.setLocalStorageData();
-		},
-
-		/**
-		 * Hook function to trigger your events.
-		 *
-		 * @method after
-		 * @return void
-		 */
-		after: function () {
 		}
+
 	});
 })(Tc.$);
