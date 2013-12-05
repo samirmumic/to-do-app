@@ -21,11 +21,22 @@
 		init: function ($ctx, sandbox, modId) {
 			// call base constructor
 			this._super($ctx, sandbox, modId);
-			
-			this.itemsdata = [];
+
+			this.itemsDataKey = 'todoitems3';
+			this.itemsData = [];
+
+			this.restoreData();
 
 			// subscribe to the channel
 			this.sandbox.subscribe('myTodoChannel', this);
+
+			this.statusMask = {
+				done: parseInt('100', 2),
+				deleted: parseInt('010', 2),
+				starred: parseInt('001', 2)
+			};
+
+
 		},
 
 		/**
@@ -36,69 +47,29 @@
 		 * @return void
 		 */
 		on: function (callback) {
+			// Find and compile template
 			this.tmplItem = doT.template($('#todoitem').text());
-			
-			this.getLocalStorageData();
+
+			this.renderAllItems();
 
 			callback();
 		},
-		
-		
-		setLocalStorageData: function() {
-			
-			localStorage.setItem('itemsdata', this.itemsdata);
-			
-		},
-		
-		getLocalStorageData: function() {
-			this.itemsdata = localStorage.getItem('itemsdata');
-			
-			var i,
-				l = this.itemsdata.length
-			;
-			for(i = 0; i < l; i++) {
-				var datum = this.itemsdata[i];
-				this.createItemInView(datum);
-			}
-			
-			
-//			// Check localstorage support via modernizr
-//			if($('html').hasClass('localstorage')) {									
-//				
-//				var $todoItems = $(localStorage.getItem('todoitems'));
-//				
-//				if ($todoItems !== null) {
-//					this.$ctx.html($todoItems);	
-//					this.sandbox.addModules($todoItems.wrap('<div></div>').parent());
-//				}
-//				
-//				
-//			} else {
-//				
-//				console.log(false);
-//			}
-//			
-		},
-		
-		
-		//
-		// Listener for adding a new To do item
 
+		/**
+		 * Listener for adding a new To do item
+		 *
+		 * @param data
+		 */
 		onAddTodo: function (data) {
-			
-			//var  $newItem = $('.skin-todo-item-template', this.$ctx).clone();
-			
-			var datum = {
-				title: data.text,
-				id: this.genId()
-				
-			};
-			
-			this.itemsdata.push(datum);
+			var item = this.itemFactory(data.text);
+			this.addItem(item);
 
-			this.createItemInView(datum);
+			this.renderItem(item);
+		},
 
-			this.setLocalStorageData();
+		onToggleItemDone: function (data) {
+			var item = this.getItem(data.id);
+			this.toggleItemDone(item);
 		},
 
 		/**
@@ -108,34 +79,154 @@
 		 * @return void
 		 */
 		after: function () {
+
 		},
-		
-		genId: function() {
-			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-			    var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-			    return v.toString(16);
-			});
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		saveData: function () {
+			localStorage.setItem(this.itemsDataKey, JSON.stringify(this.itemsData));
 		},
-		
-		createItemInView: function(datum) {
-			var html = this.tmplItem(datum);
-			
-			var $newItem = $(html);
-			
-			
-			console.log(datum);
-			
+
+		restoreData: function () {
+			var data = JSON.parse(localStorage.getItem(this.itemsDataKey));
+			if (data !== null) {
+				this.itemsData = data;
+			}
+		},
+
+		addItem: function (item) {
+			this.itemsData.push(item);
+			this.saveData();
+		},
+
+		/**
+		 * Find entry and return
+		 * @param id
+		 * @returns {*}
+		 */
+		getItem: function (id) {
+			var i,
+				l = this.itemsData.length
+				;
+			for (i = 0; i < l; i++) {
+				var item = this.itemsData[i];
+				if (item.id === id) {
+					return item;
+				}
+			}
+		},
+
+		itemFactory: function (title) {
+			return {
+				title: title,
+				id: this.generateUUID(),
+				status: 0
+			};
+		},
+
+		isItemDone: function (item) {
+			return this.isItemStatus(item, 'done');
+		},
+
+		setItemDone: function (item) {
+			this.setItemStatus(item, 'done');
+		},
+
+		unsetItemDone: function (item) {
+			this.unsetItemStatus(item, 'done');
+		},
+
+		toggleItemDone: function (item) {
+			this.flipItemStatus(item, 'done');
+		},
+
+		isItemStarred: function (item) {
+			return this.isItemStatus(item, 'starred');
+		},
+
+		setItemStarred: function (item) {
+			this.setItemStatus(item, 'starred');
+		},
+
+		unsetItemStarred: function (item) {
+			this.unsetItemStatus(item, 'starred');
+		},
+
+		toggleItemStarred: function (item) {
+			this.flipItemStatus(item, 'starred');
+		},
+
+		isItemDeleted: function (item) {
+			this.isItemStatus(item, 'deleted');
+		},
+
+		setItemDeleted: function (item) {
+			this.setItemStatus(item, 'deleted');
+		},
+
+		unsetItemDeleted: function (item) {
+			this.unsetItemStatus(item, 'deleted');
+		},
+
+		toggleItemDeleted: function (item) {
+			this.flipItemStatus(item, 'deleted');
+		},
+
+		isItemStatus: function (item, statusName) {
+			return (item.status & this.statusMask[statusName]) ? true : false;
+		},
+
+		setItemStatus: function (item, statusName) {
+			item.status = (item.status | this.statusMask[statusName]);
+		},
+
+		unsetItemStatus: function (item, statusName) {
+			item.status = (item.status & ~this.statusMask[statusName]);
+		},
+
+		flipItemStatus: function (item, statusName) {
+			item.status = (item.status ^ this.statusMask[statusName]);
+		},
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		renderItem: function (item) {
+			// Run template
+			var html = this.tmplItem(item),
+				$newItem = $(html)
+				;
+
 			// Prepend new To do item
 			$newItem.prependTo(this.$ctx).fadeIn();
-			
-			// Remove Template Class
-			$newItem.removeClass('skin-todo-item-template');
 
-			// Start module			
+			// Initialize as Terrific module
 			this.sandbox.addModules($newItem.wrap('<div></div>').parent());
 
 			$newItem.unwrap();
-		}
+		},
 
+		renderAllItems: function () {
+			var i,
+				l = this.itemsData.length
+				;
+			for (i = 0; i < l; i++) {
+				var item = this.itemsData[i];
+				this.renderItem(item);
+			}
+		},
+
+		/**
+		 * Generates and returns rfc4122 version 4 compliant UUID.
+		 *
+		 * @returns {string}
+		 */
+		generateUUID: function () {
+			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+				var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+				return v.toString(16);
+			});
+		}
 	});
 })(Tc.$);

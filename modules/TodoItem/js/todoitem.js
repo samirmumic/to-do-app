@@ -43,13 +43,14 @@
 			 
 			// Toggle item state
 			$checkbox.on('click', function (ev) {
-
 				$ctx.toggleClass(skinNameChecked);
+				mod.fire('toggleItemDone', { stat: $input.val() }, ['myTodoChannel'], function() { 					
+									console.log('Fired!');
+								});	
 			});
-			console.log($label);
+
 			
 			// Start Editing: Replace Label with Inputfield
-			
 			$label.on('dblclick', function () {
 					console.log('dblc');
 				if ($ctx.hasClass(skinNameChecked)) return;
