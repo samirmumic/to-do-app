@@ -1,0 +1,11 @@
+<script src="dist/base.min.js"></script>
+
+<script>
+(function($) {
+    $(document).ready(function() {
+        var application = new Tc.Application($('body'), {});
+        application.registerModules();
+        application.start();
+    });
+})(Tc.$);
+</script>

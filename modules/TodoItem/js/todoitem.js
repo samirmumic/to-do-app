@@ -21,6 +21,7 @@
 		init: function ($ctx, sandbox, modId) {
 			// call base constructor
 			this._super($ctx, sandbox, modId);
+			this.sandbox.subscribe('myTodoChannel', this);
 		},
 
 		/**
@@ -31,28 +32,28 @@
 		 * @return void
 		 */
 		on: function (callback) {
-			
-			
-			var $ctx = this.$ctx
-				, $label = $('.item-label', this.$ctx)
-				, $checkbox = $('.item-checkbox', this.$ctx)
-				, $editInputHtml = $('.edit-inputfield', this.$ctx)
-				, skinNameEdit = 'skin-todo-item-edit'
-				, skinNameChecked = 'skin-todo-item-checked'
-				;
-			 
+
+
+			var  $ctx = this.$ctx
+				,$label = $('.item-label', this.$ctx)
+				,$checkbox = $('.item-checkbox', this.$ctx)
+				,$editInputHtml = $('.edit-inputfield', this.$ctx)
+				,skinNameEdit = 'skin-todo-item-edit'
+				,skinNameChecked = 'skin-todo-item-checked'
+				,_this = this
+			;
+
 			// Toggle item state
 			$checkbox.on('click', function (ev) {
 				$ctx.toggleClass(skinNameChecked);
-				mod.fire('toggleItemDone', { stat: $input.val() }, ['myTodoChannel'], function() { 					
-									console.log('Fired!');
-								});	
+				var id = $ctx.data('item-id');
+				_this.fire('toggleItemDone', { id: id }, ['myTodoChannel']);
 			});
 
-			
+
 			// Start Editing: Replace Label with Inputfield
 			$label.on('dblclick', function () {
-					console.log('dblc');
+				console.log('dblc');
 				if ($ctx.hasClass(skinNameChecked)) return;
 
 				$ctx.addClass(skinNameEdit);
@@ -70,12 +71,19 @@
 
 			// Edit abbrechen mit ESC
 			$(document).keyup(function (e) {
-				
-				if($ctx.hasClass(skinNameEdit) == false) return;
-				
+
+				if ($ctx.hasClass(skinNameEdit) === false) return;
+
 				if (e.keyCode == 27) {
 					$editInputHtml.focusout();
-				}  
+				}
+			});
+
+			$(document).keyup(function (e) {
+				var $inputcreate = $('.input');
+				if (e.keyCode == 13) {
+					$inputcreate.focusout();
+				}
 			});
 
 			// Stop Editing: Replace Inputfield with Label
@@ -92,9 +100,9 @@
 			var $list = $(".mod-todo-list");
 			$list.sortable();
 			$list.disableSelection();
-			
+
 			callback();
-		},				
+		},
 
 		/**
 		 * Hook function to trigger your events.

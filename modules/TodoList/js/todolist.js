@@ -22,7 +22,7 @@
 			// call base constructor
 			this._super($ctx, sandbox, modId);
 
-			this.itemsDataKey = 'todoitems3';
+			this.itemsDataKey = 'todoitems4';
 			this.itemsData = [];
 
 			this.restoreData();
@@ -31,7 +31,7 @@
 			this.sandbox.subscribe('myTodoChannel', this);
 
 			this.statusMask = {
-				done: parseInt('100', 2),
+				done:    parseInt('100', 2),
 				deleted: parseInt('010', 2),
 				starred: parseInt('001', 2)
 			};
@@ -51,6 +51,12 @@
 			this.tmplItem = doT.template($('#todoitem').text());
 
 			this.renderAllItems();
+
+			var $starred = $('.starred');
+
+			$starred.on('click', function (ev) {
+				$starred.toggleClass('favo');
+			});
 
 			callback();
 		},
@@ -179,22 +185,32 @@
 
 		setItemStatus: function (item, statusName) {
 			item.status = (item.status | this.statusMask[statusName]);
+			this.saveData();
 		},
 
 		unsetItemStatus: function (item, statusName) {
 			item.status = (item.status & ~this.statusMask[statusName]);
+			this.saveData();
 		},
 
 		flipItemStatus: function (item, statusName) {
 			item.status = (item.status ^ this.statusMask[statusName]);
+			this.saveData();
 		},
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		renderItem: function (item) {
+			var tmplData = {
+				title: item.title,
+				id: item.id,
+				isDone: this.isItemDone(item),
+				isStarred: this.isItemStarred(item)
+			};
+
 			// Run template
-			var html = this.tmplItem(item),
+			var html = this.tmplItem(tmplData),
 				$newItem = $(html)
 				;
 

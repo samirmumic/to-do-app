@@ -45,10 +45,10 @@
 				ev.preventDefault();
 				
 				// fire event to another module
-				mod.fire('addTodo', { text : $input.val() }, ['myTodoChannel'], function() { 					
+				mod.fire('addTodo', { text : $input.val() }, ['myTodoChannel'], function() {
 					console.log('Fired!');
-				});							   
-			});			
+				});
+			});
 
 			callback();
 		},
@@ -59,7 +59,7 @@
 		 * @method after
 		 * @return void
 		 */
-		after: function () {	
+		after: function () {
 			
 		}
 	});

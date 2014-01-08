@@ -1,12 +1,14 @@
 <?php module('TodoItem', 'template', 'template') ?>
 
-<script id="todoitem" type="text/x-dot-template">
-	<div class="mod mod-todo-item skin-mod-todo-item" data-item-id="{{=it.id}}">
-		<div class="box">
-			<p class="item-content">
-				<input class="item-checkbox" type="checkbox" id="input-text"><label class="item-label">{{=it.title}}</label>
-				<input class="edit-inputfield" />
-			</p>
+	<script id="todoitem" type="text/x-dot-template">
+		<div class="mod mod-todo-item skin-mod-todo-item{{? it.isDone }} skin-todo-item-checked{{?}}" data-item-id="{{=it.id}}">
+			<div class="box">
+				<p class="item-content">
+					<input class="item-checkbox" type="checkbox" id="input-text" {{? it.isDone }} checked="checked"{{?}}><label class="item-label">{{=it.title}}</label>
+					<input class="edit-inputfield" />
+				</p>
+				<div class="starred"></div>
+			</div>
 		</div>
-	</div>
-</script> 
+	</script>
+		

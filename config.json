@@ -1,0 +1,25 @@
+{
+	"base": "classpath:/terrific",
+	"scan": [
+		"/assets/**",
+		"/modules/**"
+	],
+	"files": {
+		"app.css": [
+			"reset.css",
+			"+variables.less",
+			"+mixins.less",
+			"!somefile.*",
+			"!/modules/Folder*/*",
+			"*.css",
+			"*.less"
+		],
+		"app.js": [
+			"jquery-1.10.2.min.js",
+			"terrific-2.0.1.js",
+			"!somefile.*",
+			"!/modules/Folder*/*",
+			"*.js"
+		]
+	}
+}

@@ -1,0 +1,19 @@
+
+<?php partial('head', array('title' => 'Home')) ?>
+
+<body class="mod-layout">
+	<header class="header">
+		<h1 class="masked">To Do App</h1>
+	</header>
+	
+	<div class="main">		
+		<h3 class="masked">Create a To Do Box</h3>
+		<?php module('CreateTodoItem') ?>
+		<?php module('TodoList') ?>	
+	</div>
+	
+	<footer>
+		<?php partial('foot') ?>
+	</footer>
+</body>
+</html>
