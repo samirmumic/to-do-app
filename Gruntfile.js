@@ -7,7 +7,7 @@ module.exports = function (grunt) {
 		concat: {
 			css: {
 				src: ['assets/css/*', 'modules/*/css/*'],
-				dest: 'dist/base.less',
+				dest: 'dist/base.less'
 			},
 			js: {
 				src: ['assets/js/*', 'modules/*/js/*'],
