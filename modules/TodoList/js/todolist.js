@@ -52,11 +52,6 @@
 
 			this.renderAllItems();
 
-			var $starred = $('.starred');
-
-			$starred.on('click', function (ev) {
-				$starred.toggleClass('favo');
-			});
 
 			callback();
 		},
@@ -76,6 +71,11 @@
 		onToggleItemDone: function (data) {
 			var item = this.getItem(data.id);
 			this.toggleItemDone(item);
+		},
+		
+		onToggleItemStarred: function (data) {
+			var item = this.getItem(data.id);
+			this.toggleItemStarred(item);
 		},
 
 		/**

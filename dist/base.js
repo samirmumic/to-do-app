@@ -25085,23 +25085,31 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 */
 		on: function (callback) {
 
-
 			var  $ctx = this.$ctx
 				,$label = $('.item-label', this.$ctx)
 				,$checkbox = $('.item-checkbox', this.$ctx)
+				,$starred = $('.starred', this.$ctx)
 				,$editInputHtml = $('.edit-inputfield', this.$ctx)
 				,skinNameEdit = 'skin-todo-item-edit'
 				,skinNameChecked = 'skin-todo-item-checked'
+				,skinNameFavo = 'skin-todo-item-favo'
 				,_this = this
 			;
 
-			// Toggle item state
+			// Toggle item state done
 			$checkbox.on('click', function (ev) {
 				$ctx.toggleClass(skinNameChecked);
 				var id = $ctx.data('item-id');
 				_this.fire('toggleItemDone', { id: id }, ['myTodoChannel']);
 			});
-
+			
+			// Toggle item state favorite
+			$starred.on('click', function (ev) {
+				$starred.toggleClass(skinNameFavo);
+				var id = $ctx.data('item-id');
+				_this.fire('toggleItemStarred', { id: id }, ['myTodoChannel']);
+			});
+			
 
 			// Start Editing: Replace Label with Inputfield
 			$label.on('dblclick', function () {
@@ -25220,11 +25228,6 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 
 			this.renderAllItems();
 
-			var $starred = $('.starred');
-
-			$starred.on('click', function (ev) {
-				$starred.toggleClass('favo');
-			});
 
 			callback();
 		},
@@ -25244,6 +25247,11 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		onToggleItemDone: function (data) {
 			var item = this.getItem(data.id);
 			this.toggleItemDone(item);
+		},
+		
+		onToggleItemStarred: function (data) {
+			var item = this.getItem(data.id);
+			this.toggleItemStarred(item);
 		},
 
 		/**
