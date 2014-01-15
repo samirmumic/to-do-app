@@ -22,6 +22,9 @@
 			// call base constructor
 			this._super($ctx, sandbox, modId);
 
+			this.$todoList = $ctx.find('.todolist');
+			this.$deletedList = $ctx.find('.deletedlist');
+
 			this.itemsDataKey = 'todoitems4';
 			this.itemsData = [];
 
@@ -31,7 +34,7 @@
 			this.sandbox.subscribe('myTodoChannel', this);
 
 			this.statusMask = {
-				done:    parseInt('100', 2),
+				done: parseInt('100', 2),
 				deleted: parseInt('010', 2),
 				starred: parseInt('001', 2)
 			};
@@ -51,6 +54,7 @@
 			this.tmplItem = doT.template($('#todoitem').text());
 
 			this.renderAllItems();
+			this.renderDeletedItems();
 
 
 			callback();
@@ -90,7 +94,8 @@
 		 * @return void
 		 */
 		after: function () {
-
+			this.$todoList.sortable();
+			this.$todoList.disableSelection();
 		},
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -206,20 +211,20 @@
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		renderItem: function (item) {
+		renderItem: function (item, $list) {
 			var tmplData = {
 				title: item.title,
 				id: item.id,
 				isDone: this.isItemDone(item)
 			};
-			
+
 			// Run template
 			var html = this.tmplItem(tmplData),
 				$newItem = $(html)
 				;
 
 			// Prepend new To do item
-			$newItem.prependTo(this.$ctx).fadeIn();
+			$newItem.prependTo($list).fadeIn();
 
 			// Initialize as Terrific module
 			this.sandbox.addModules($newItem.wrap('<div></div>').parent());
@@ -234,8 +239,21 @@
 			for (i = 0; i < l; i++) {
 				var item = this.itemsData[i];
 				if (!this.isItemDeleted(item)) {
-					this.renderItem(item);
+					this.renderItem(item, this.$todoList);
 				}
+
+			}
+		},
+		renderDeletedItems: function () {
+			var i,
+				l = this.itemsData.length
+				;
+			for (i = 0; i < l; i++) {
+				var item = this.itemsData[i];
+				if (this.isItemDeleted(item)) {
+					this.renderItem(item, this.$deletedList);
+				}
+
 			}
 		},
 

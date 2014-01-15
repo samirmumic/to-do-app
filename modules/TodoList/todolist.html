@@ -1,3 +1,7 @@
+<div class="todolist"></div>
+<h3 class="masked hide h3masked">Deleted Items</h3>
+<div class="deletedlist hide"></div>
+
 <?php module('TodoItem', 'template', 'template') ?>
 
 	<script id="todoitem" type="text/x-dot-template">
@@ -8,6 +12,7 @@
 					<input class="edit-inputfield" />
 				</p>
 				<div class="starred {{? it.isStarred }} skin-todo-item-favo {{?}}"></div>
+				<div class="icontrash"></div>
 			</div>
 		</div>
 	</script>

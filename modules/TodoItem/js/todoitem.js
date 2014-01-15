@@ -59,27 +59,7 @@
 			});
 			
 			
-			// Delete item 
-			$('#trash').sortable({
-
-				update: function (event, ui) {
-					ui.item.hide();
-					
-					// Remove from the HTML
-					//$('.mod-todo-item', this).remove();
-					
-					//Fire Status
-					//var id = $ctx.data('item-id');
-					var id = ui.item.data('item-id');
-					_this.fire('setItemDeleted', { id: id }, ['myTodoChannel']);
-				}
-			});
 			
-			$('.mod-todo-list').sortable({
-
-				cursor: 'move',
-				connectWith: '#trash'
-			});
 
 
 			// Start Editing: Replace Label with Inputfield
@@ -128,9 +108,6 @@
 				$ctx.removeClass(skinNameEdit);
 			});
 
-			var $list = $(".mod-todo-list");
-			$list.sortable();
-			$list.disableSelection();
 
 			callback();
 		},

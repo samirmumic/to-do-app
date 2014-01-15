@@ -25111,27 +25111,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			});
 			
 			
-			// Delete item 
-			$('#trash').sortable({
-
-				update: function (event, ui) {
-					ui.item.hide();
-					
-					// Remove from the HTML
-					//$('.mod-todo-item', this).remove();
-					
-					//Fire Status
-					//var id = $ctx.data('item-id');
-					var id = ui.item.data('item-id');
-					_this.fire('setItemDeleted', { id: id }, ['myTodoChannel']);
-				}
-			});
 			
-			$('.mod-todo-list').sortable({
-
-				cursor: 'move',
-				connectWith: '#trash'
-			});
 
 
 			// Start Editing: Replace Label with Inputfield
@@ -25180,9 +25160,6 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 				$ctx.removeClass(skinNameEdit);
 			});
 
-			var $list = $(".mod-todo-list");
-			$list.sortable();
-			$list.disableSelection();
 
 			callback();
 		},
@@ -25221,6 +25198,9 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			// call base constructor
 			this._super($ctx, sandbox, modId);
 
+			this.$todoList = $ctx.find('.todolist');
+			this.$deletedList = $ctx.find('.deletedlist');
+
 			this.itemsDataKey = 'todoitems4';
 			this.itemsData = [];
 
@@ -25230,7 +25210,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			this.sandbox.subscribe('myTodoChannel', this);
 
 			this.statusMask = {
-				done:    parseInt('100', 2),
+				done: parseInt('100', 2),
 				deleted: parseInt('010', 2),
 				starred: parseInt('001', 2)
 			};
@@ -25250,6 +25230,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			this.tmplItem = doT.template($('#todoitem').text());
 
 			this.renderAllItems();
+			this.renderDeletedItems();
 
 
 			callback();
@@ -25289,7 +25270,8 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 * @return void
 		 */
 		after: function () {
-
+			this.$todoList.sortable();
+			this.$todoList.disableSelection();
 		},
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25405,20 +25387,20 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		renderItem: function (item) {
+		renderItem: function (item, $list) {
 			var tmplData = {
 				title: item.title,
 				id: item.id,
 				isDone: this.isItemDone(item)
 			};
-			
+
 			// Run template
 			var html = this.tmplItem(tmplData),
 				$newItem = $(html)
 				;
 
 			// Prepend new To do item
-			$newItem.prependTo(this.$ctx).fadeIn();
+			$newItem.prependTo($list).fadeIn();
 
 			// Initialize as Terrific module
 			this.sandbox.addModules($newItem.wrap('<div></div>').parent());
@@ -25433,8 +25415,21 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			for (i = 0; i < l; i++) {
 				var item = this.itemsData[i];
 				if (!this.isItemDeleted(item)) {
-					this.renderItem(item);
+					this.renderItem(item, this.$todoList);
 				}
+
+			}
+		},
+		renderDeletedItems: function () {
+			var i,
+				l = this.itemsData.length
+				;
+			for (i = 0; i < l; i++) {
+				var item = this.itemsData[i];
+				if (this.isItemDeleted(item)) {
+					this.renderItem(item, this.$deletedList);
+				}
+
 			}
 		},
 
@@ -25448,6 +25443,87 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 				var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
 				return v.toString(16);
 			});
+		}
+	});
+})(Tc.$);
+
+(function ($) {
+	/**
+	 * Default module implementation.
+	 *
+	 * @author Remo Brunschwiler
+	 * @namespace Tc.Module
+	 * @class Default
+	 * @extends Tc.Module
+	 */
+	Tc.Module.Trash = Tc.Module.extend({
+
+		/**
+		 * Initializes the Default module.
+		 *
+		 * @method init
+		 * @constructor
+		 * @param {jQuery|Zepto} $ctx the jquery context
+		 * @param {Sandbox} sandbox the sandbox to get the resources from
+		 * @param {String} modId the unique module id
+		 */
+		init: function ($ctx, sandbox, modId) {
+			// call base constructor
+			this._super($ctx, sandbox, modId);
+			this.sandbox.subscribe('myTodoChannel', this);
+		},
+
+		/**
+		 * Hook function to do all of your module stuff.
+		 *
+		 * @method on
+		 * @param {Function} callback function
+		 * @return void
+		 */
+		on: function (callback) {
+
+			var _this = this,
+				$deletedList = $('.deletedlist'),
+				$title = $('.h3masked');
+
+			// Delete item 
+			$('#trash').sortable({
+
+				update: function (event, ui) {
+					ui.item.hide();
+
+					// Remove from the HTML
+					//$('.mod-todo-item', this).remove();
+
+					// Fire Status
+					//var id = $ctx.data('item-id');
+					var id = ui.item.data('item-id');
+					_this.fire('setItemDeleted', { id: id }, ['myTodoChannel']);
+				}
+			});
+
+			
+
+			$('.todolist').sortable({
+				cursor: 'move',
+				connectWith: '#trash'
+			});
+
+			$('#trash').on('click', function () {
+				$deletedList.removeClass('hide');
+				$title.removeClass('hide');
+			});
+
+			callback();
+		},
+
+		/**
+		 * Hook function to trigger your events.
+		 *
+		 * @method after
+		 * @return void
+		 */
+		after: function () {
 		}
 	});
 })(Tc.$);

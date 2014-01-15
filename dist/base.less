@@ -572,64 +572,8 @@ table {
 	}
 	
 	
-	.trash {
-		height: 150px;
-		width: 150px;
-		position: fixed;
-		right: 99px;
-		bottom: -10px;
-		background-color: transparent;
-		z-index: 99;
-		&:hover {
-			
-			&:hover {
-				.balk1,
-				.balk2,
-				.balk3,
-				.balk4,
-				.balk5 {
-					background-color:  rgba(193, 193, 192, 0.9);
-				}
-				.balk5 {
-					bottom:  85px;
-					-webkit-transform:rotate(110deg);
-				}
-			}
-		}
-	}
-	.balk1,
-	.balk2,
-	.balk3,
-	.balk4,
-	.balk5 {
-		height: 50px;
-		width: 7px;
-		background-color:  rgba(193, 193, 192, 0.5);
-		position: fixed;
-		bottom: 40px;
-		right: 195px;
-		transition: all 1s ease;
-	}
-	.balk2 {
-		right: 170px;
-		bottom: 35px;
-	}
-	.balk3 {
-		right: 145px;
-		bottom:40px;
-	}
-	.balk4 {
-		bottom: -5px;
-		-webkit-transform:rotate(90deg);
-		height: 60px;
-		right: 170px;
-	}
-	.balk5 {
-		bottom:  75px;
-		-webkit-transform:rotate(90deg);
-		height: 60px;
-		right: 170px;
-		
+	.hide {
+		display: none !important;
 	}
 
 .mod-create-todo-item{
@@ -736,4 +680,75 @@ table {
 	height: 500px;
 	top: -449px;
 	right: -415px;
+}
+.icontrash {
+	background-image: url('/assets/img/icontrash.png');
+	height: 15px;
+	width: 20px;
+	position: absolute;
+	right: 8px;
+	top: 24px;
+}
+
+.mod-trash {
+	.trash {
+		height: 150px;
+		width: 150px;
+		position: fixed;
+		right: 99px;
+		bottom: -10px;
+		background-color: transparent;
+		z-index: 99;
+		&:hover {
+
+			&:hover {
+				.balk1,
+				.balk2,
+				.balk3,
+				.balk4,
+				.balk5 {
+					background-color: rgba(193, 193, 192, 0.9);
+				}
+				.balk5 {
+					bottom: 85px;
+					-webkit-transform: rotate(110deg);
+				}
+			}
+		}
+	}
+	.balk1,
+	.balk2,
+	.balk3,
+	.balk4,
+	.balk5 {
+		height: 50px;
+		width: 7px;
+		background-color: rgba(193, 193, 192, 0.5);
+		position: fixed;
+		bottom: 40px;
+		right: 195px;
+		transition: all 1s ease;
+	}
+	.balk2 {
+		right: 170px;
+		bottom: 35px;
+	}
+	.balk3 {
+		right: 145px;
+		bottom: 40px;
+	}
+	.balk4 {
+		bottom: -5px;
+		-webkit-transform: rotate(90deg);
+		height: 60px;
+		right: 170px;
+	}
+	.balk5 {
+		bottom: 75px;
+		-webkit-transform: rotate(90deg);
+		height: 60px;
+		right: 170px;
+
+	}
+
 }

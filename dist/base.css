@@ -592,66 +592,8 @@ h3 {
   }
 }
 
-.trash {
-  height: 150px;
-  width: 150px;
-  position: fixed;
-  right: 99px;
-  bottom: -10px;
-  background-color: transparent;
-  z-index: 99;
-}
-
-.trash:hover:hover .balk1,
-.trash:hover:hover .balk2,
-.trash:hover:hover .balk3,
-.trash:hover:hover .balk4,
-.trash:hover:hover .balk5 {
-  background-color: rgba(193, 193, 192, 0.9);
-}
-
-.trash:hover:hover .balk5 {
-  bottom: 85px;
-  -webkit-transform: rotate(110deg);
-}
-
-.balk1,
-.balk2,
-.balk3,
-.balk4,
-.balk5 {
-  height: 50px;
-  width: 7px;
-  background-color: rgba(193, 193, 192, 0.5);
-  position: fixed;
-  bottom: 40px;
-  right: 195px;
-  -webkit-transition: all 1s ease;
-  transition: all 1s ease;
-}
-
-.balk2 {
-  right: 170px;
-  bottom: 35px;
-}
-
-.balk3 {
-  right: 145px;
-  bottom: 40px;
-}
-
-.balk4 {
-  bottom: -5px;
-  -webkit-transform: rotate(90deg);
-  height: 60px;
-  right: 170px;
-}
-
-.balk5 {
-  bottom: 75px;
-  -webkit-transform: rotate(90deg);
-  height: 60px;
-  right: 170px;
+.hide {
+  display: none !important;
 }
 
 .mod-create-todo-item {
@@ -761,4 +703,75 @@ h3 {
   height: 500px;
   top: -449px;
   right: -415px;
+}
+
+.icontrash {
+  background-image: url('/assets/img/icontrash.png');
+  height: 15px;
+  width: 20px;
+  position: absolute;
+  right: 8px;
+  top: 24px;
+}
+
+.mod-trash .trash {
+  height: 150px;
+  width: 150px;
+  position: fixed;
+  right: 99px;
+  bottom: -10px;
+  background-color: transparent;
+  z-index: 99;
+}
+
+.mod-trash .trash:hover:hover .balk1,
+.mod-trash .trash:hover:hover .balk2,
+.mod-trash .trash:hover:hover .balk3,
+.mod-trash .trash:hover:hover .balk4,
+.mod-trash .trash:hover:hover .balk5 {
+  background-color: rgba(193, 193, 192, 0.9);
+}
+
+.mod-trash .trash:hover:hover .balk5 {
+  bottom: 85px;
+  -webkit-transform: rotate(110deg);
+}
+
+.mod-trash .balk1,
+.mod-trash .balk2,
+.mod-trash .balk3,
+.mod-trash .balk4,
+.mod-trash .balk5 {
+  height: 50px;
+  width: 7px;
+  background-color: rgba(193, 193, 192, 0.5);
+  position: fixed;
+  bottom: 40px;
+  right: 195px;
+  -webkit-transition: all 1s ease;
+  transition: all 1s ease;
+}
+
+.mod-trash .balk2 {
+  right: 170px;
+  bottom: 35px;
+}
+
+.mod-trash .balk3 {
+  right: 145px;
+  bottom: 40px;
+}
+
+.mod-trash .balk4 {
+  bottom: -5px;
+  -webkit-transform: rotate(90deg);
+  height: 60px;
+  right: 170px;
+}
+
+.mod-trash .balk5 {
+  bottom: 75px;
+  -webkit-transform: rotate(90deg);
+  height: 60px;
+  right: 170px;
 }

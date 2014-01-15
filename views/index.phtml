@@ -2,28 +2,20 @@
 <?php partial('head', array('title' => 'Home')) ?>
 
 <body class="mod-layout">
-	<header class="header">
-		<h1 class="masked">To Do App</h1>
-	</header>
+<header class="header">
+	<h1 class="masked">To Do App</h1>
+</header>
+
+<div class="main">
+	<h3 class="masked">Create a To Do Box</h3>
+	<?php module('CreateTodoItem') ?>
+	<?php module('TodoList') ?>
+</div>
 	
-	<div class="main">		
-		<h3 class="masked">Create a To Do Box</h3>
-		<?php module('CreateTodoItem') ?>
-		<?php module('TodoList') ?>	
-	</div>
-	
-	
-	<div class="trash" id="trash">
-		<div class="balk1"></div>
-		<div class="balk2"></div>
-		<div class="balk3"></div>
-		<div class="balk4"></div>
-		<div class="balk5"></div>
-	</div>
-	
-	
-	<footer>
-		<?php partial('foot') ?>
-	</footer>
+	<?php module('Trash') ?>
+
+<footer>
+	<?php partial('foot') ?>
+</footer>
 </body>
 </html>
