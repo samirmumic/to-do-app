@@ -1,4 +1,9 @@
-<script src="dist/base.min.js"></script>
+
+<? if (APP_ENV == 'dev'): ?>
+	<script src="dist/base.js"></script>
+<? else: ?>
+	<script src="dist/base.min.js"></script>
+<? endif; ?>
 
 <script>
 (function($) {

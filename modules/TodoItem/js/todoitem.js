@@ -33,16 +33,16 @@
 		 */
 		on: function (callback) {
 
-			var  $ctx = this.$ctx
-				,$label = $('.item-label', this.$ctx)
-				,$checkbox = $('.item-checkbox', this.$ctx)
-				,$starred = $('.starred', this.$ctx)
-				,$editInputHtml = $('.edit-inputfield', this.$ctx)
-				,skinNameEdit = 'skin-todo-item-edit'
-				,skinNameChecked = 'skin-todo-item-checked'
-				,skinNameFavo = 'skin-todo-item-favo'
-				,_this = this
-			;
+			var $ctx = this.$ctx    
+				, $label = $('.item-label', this.$ctx)
+				, $checkbox = $('.item-checkbox', this.$ctx)
+				, $starred = $('.starred', this.$ctx)
+				, $editInputHtml = $('.edit-inputfield', this.$ctx)
+				, skinNameEdit = 'skin-todo-item-edit'
+				, skinNameChecked = 'skin-todo-item-checked'
+				, skinNameFavo = 'skin-todo-item-favo'
+				, _this = this
+				;
 
 			// Toggle item state done
 			$checkbox.on('click', function (ev) {
@@ -50,7 +50,7 @@
 				var id = $ctx.data('item-id');
 				_this.fire('toggleItemDone', { id: id }, ['myTodoChannel']);
 			});
-			
+
 			// Toggle item state favorite
 			$starred.on('click', function (ev) {
 				$starred.toggleClass(skinNameFavo);
@@ -58,10 +58,33 @@
 				_this.fire('toggleItemStarred', { id: id }, ['myTodoChannel']);
 			});
 			
+			
+			// Delete item 
+			$('#trash').sortable({
+
+				update: function (event, ui) {
+					ui.item.hide();
+					
+					// Remove from the HTML
+					//$('.mod-todo-item', this).remove();
+					
+					//Fire Status
+					//var id = $ctx.data('item-id');
+					var id = ui.item.data('item-id');
+					_this.fire('setItemDeleted', { id: id }, ['myTodoChannel']);
+				}
+			});
+			
+			$('.mod-todo-list').sortable({
+
+				cursor: 'move',
+				connectWith: '#trash'
+			});
+
 
 			// Start Editing: Replace Label with Inputfield
 			$label.on('dblclick', function () {
-				console.log('dblc');
+
 				if ($ctx.hasClass(skinNameChecked)) return;
 
 				$ctx.addClass(skinNameEdit);

@@ -72,10 +72,15 @@
 			var item = this.getItem(data.id);
 			this.toggleItemDone(item);
 		},
-		
+
 		onToggleItemStarred: function (data) {
 			var item = this.getItem(data.id);
 			this.toggleItemStarred(item);
+		},
+
+		onSetItemDeleted: function (data) {
+			var item = this.getItem(data.id);
+			this.setItemDeleted(item);
 		},
 
 		/**
@@ -164,7 +169,7 @@
 		},
 
 		isItemDeleted: function (item) {
-			this.isItemStatus(item, 'deleted');
+			return this.isItemStatus(item, 'deleted');
 		},
 
 		setItemDeleted: function (item) {
@@ -205,10 +210,9 @@
 			var tmplData = {
 				title: item.title,
 				id: item.id,
-				isDone: this.isItemDone(item),
-				isStarred: this.isItemStarred(item)
+				isDone: this.isItemDone(item)
 			};
-
+			
 			// Run template
 			var html = this.tmplItem(tmplData),
 				$newItem = $(html)
@@ -229,7 +233,9 @@
 				;
 			for (i = 0; i < l; i++) {
 				var item = this.itemsData[i];
-				this.renderItem(item);
+				if (!this.isItemDeleted(item)) {
+					this.renderItem(item);
+				}
 			}
 		},
 

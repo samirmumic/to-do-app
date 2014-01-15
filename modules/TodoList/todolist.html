@@ -7,7 +7,7 @@
 					<input class="item-checkbox" type="checkbox" id="input-text" {{? it.isDone }} checked="checked"{{?}}><label class="item-label">{{=it.title}}</label>
 					<input class="edit-inputfield" />
 				</p>
-				<div class="starred"></div>
+				<div class="starred {{? it.isStarred }} skin-todo-item-favo {{?}}"></div>
 			</div>
 		</div>
 	</script>

@@ -25085,16 +25085,16 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 */
 		on: function (callback) {
 
-			var  $ctx = this.$ctx
-				,$label = $('.item-label', this.$ctx)
-				,$checkbox = $('.item-checkbox', this.$ctx)
-				,$starred = $('.starred', this.$ctx)
-				,$editInputHtml = $('.edit-inputfield', this.$ctx)
-				,skinNameEdit = 'skin-todo-item-edit'
-				,skinNameChecked = 'skin-todo-item-checked'
-				,skinNameFavo = 'skin-todo-item-favo'
-				,_this = this
-			;
+			var $ctx = this.$ctx    
+				, $label = $('.item-label', this.$ctx)
+				, $checkbox = $('.item-checkbox', this.$ctx)
+				, $starred = $('.starred', this.$ctx)
+				, $editInputHtml = $('.edit-inputfield', this.$ctx)
+				, skinNameEdit = 'skin-todo-item-edit'
+				, skinNameChecked = 'skin-todo-item-checked'
+				, skinNameFavo = 'skin-todo-item-favo'
+				, _this = this
+				;
 
 			// Toggle item state done
 			$checkbox.on('click', function (ev) {
@@ -25102,7 +25102,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 				var id = $ctx.data('item-id');
 				_this.fire('toggleItemDone', { id: id }, ['myTodoChannel']);
 			});
-			
+
 			// Toggle item state favorite
 			$starred.on('click', function (ev) {
 				$starred.toggleClass(skinNameFavo);
@@ -25110,10 +25110,33 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 				_this.fire('toggleItemStarred', { id: id }, ['myTodoChannel']);
 			});
 			
+			
+			// Delete item 
+			$('#trash').sortable({
+
+				update: function (event, ui) {
+					ui.item.hide();
+					
+					// Remove from the HTML
+					//$('.mod-todo-item', this).remove();
+					
+					//Fire Status
+					//var id = $ctx.data('item-id');
+					var id = ui.item.data('item-id');
+					_this.fire('setItemDeleted', { id: id }, ['myTodoChannel']);
+				}
+			});
+			
+			$('.mod-todo-list').sortable({
+
+				cursor: 'move',
+				connectWith: '#trash'
+			});
+
 
 			// Start Editing: Replace Label with Inputfield
 			$label.on('dblclick', function () {
-				console.log('dblc');
+
 				if ($ctx.hasClass(skinNameChecked)) return;
 
 				$ctx.addClass(skinNameEdit);
@@ -25248,10 +25271,15 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			var item = this.getItem(data.id);
 			this.toggleItemDone(item);
 		},
-		
+
 		onToggleItemStarred: function (data) {
 			var item = this.getItem(data.id);
 			this.toggleItemStarred(item);
+		},
+
+		onSetItemDeleted: function (data) {
+			var item = this.getItem(data.id);
+			this.setItemDeleted(item);
 		},
 
 		/**
@@ -25340,7 +25368,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		},
 
 		isItemDeleted: function (item) {
-			this.isItemStatus(item, 'deleted');
+			return this.isItemStatus(item, 'deleted');
 		},
 
 		setItemDeleted: function (item) {
@@ -25381,10 +25409,9 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			var tmplData = {
 				title: item.title,
 				id: item.id,
-				isDone: this.isItemDone(item),
-				isStarred: this.isItemStarred(item)
+				isDone: this.isItemDone(item)
 			};
-
+			
 			// Run template
 			var html = this.tmplItem(tmplData),
 				$newItem = $(html)
@@ -25405,7 +25432,9 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 				;
 			for (i = 0; i < l; i++) {
 				var item = this.itemsData[i];
-				this.renderItem(item);
+				if (!this.isItemDeleted(item)) {
+					this.renderItem(item);
+				}
 			}
 		},
 

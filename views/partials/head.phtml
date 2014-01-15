@@ -1,9 +1,18 @@
+<?php
+
+define('APP_ENV', 'dev');
+
+?>
 <!DOCTYPE html>
 <html>
 	<head>
 		<title><?php echo $data['title'] ?></title>
 		<meta charset="utf-8" />
 		<meta name="robots" content="noindex, nofollow" />
-		<link rel="stylesheet" href="dist/base.min.css" type="text/css" />
+		<? if (APP_ENV == 'dev'): ?>
+			<link rel="stylesheet" href="dist/base.css" type="text/css" />
+		<? else: ?>
+			<link rel="stylesheet" href="dist/base.min.css" type="text/css" />
+		<? endif; ?>
 		<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 	</head>

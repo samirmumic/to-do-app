@@ -79,12 +79,12 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	
-	grunt.registerTask('build-js', ['concat:js', 'jshint', 'uglify']);
-	
-	grunt.registerTask('build-css', ['concat:css', 'less', 'autoprefixer', 'cssmin']);
+	grunt.registerTask('build-js', ['concat:js', 'jshint']);
+	grunt.registerTask('build-css', ['concat:css', 'less', 'autoprefixer']);
 
 	// Default task(s).
 	grunt.registerTask('default', ['build-css', 'build-js', 'watch']);
+	grunt.registerTask('prod', ['build-css','cssmin', 'build-js', 'uglify']);
 	
 	
 
