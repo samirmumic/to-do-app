@@ -35,13 +35,14 @@
 
 			var _this = this,
 				$deletedList = $('.deletedlist'),
+				$clearbutton = $('.clearlistbutton'),
 				$title = $('.h3masked');
 
 			// Delete item 
 			$('#trash').sortable({
 
 				update: function (event, ui) {
-					ui.item.hide();
+					ui.item.remove();
 
 					// Remove from the HTML
 					//$('.mod-todo-item', this).remove();
@@ -52,17 +53,16 @@
 					_this.fire('setItemDeleted', { id: id }, ['myTodoChannel']);
 				}
 			});
-
 			
 
 			$('.todolist').sortable({
 				cursor: 'move',
 				connectWith: '#trash'
 			});
-
+			
+			// Shows the deleted List 
 			$('#trash').on('click', function () {
-				$deletedList.removeClass('hide');
-				$title.removeClass('hide');
+				_this.fire('toggleDeletedList', {}, ['myTodoChannel']);
 			});
 
 			callback();
@@ -75,6 +75,10 @@
 		 * @return void
 		 */
 		after: function () {
+		},
+		
+		onSetCounter: function (data){
+			$('.counter').text(data.amount);
 		}
 	});
 })(Tc.$);

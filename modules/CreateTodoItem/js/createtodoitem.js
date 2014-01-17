@@ -21,7 +21,7 @@
 		init: function ($ctx, sandbox, modId) {
 			// call base constructor
 			this._super($ctx, sandbox, modId);
-			
+
 			// subscribe to the channel
 			this.sandbox.subscribe('myTodoChannel', this);
 		},
@@ -35,19 +35,27 @@
 		 */
 		on: function (callback) {
 
-			var  mod = this,
+			var mod = this,
 				$btn = $('.btn', this.$ctx),
 				$input = $('.input', this.$ctx)
-			;
+				;
 
 			$btn.on('click', function (ev) {
-				
+
 				ev.preventDefault();
-				
+
 				// fire event to another module
-				mod.fire('addTodo', { text : $input.val() }, ['myTodoChannel'], function() {
+				mod.fire('addTodo', { text: $input.val() }, ['myTodoChannel'], function () {
 					console.log('Fired!');
 				});
+			});
+			
+			$(document).keyup(function (e) {
+				if (e.keyCode == 13) {
+					mod.fire('addTodo', { text: $input.val() }, ['myTodoChannel'], function () {
+					console.log('Fired!');
+					});
+				}
 			});
 
 			callback();
@@ -60,7 +68,7 @@
 		 * @return void
 		 */
 		after: function () {
-			
+
 		}
 	});
 })(Tc.$);

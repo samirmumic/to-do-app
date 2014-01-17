@@ -33,7 +33,7 @@
 		 */
 		on: function (callback) {
 
-			var $ctx = this.$ctx    
+			var $ctx = this.$ctx
 				, $label = $('.item-label', this.$ctx)
 				, $checkbox = $('.item-checkbox', this.$ctx)
 				, $starred = $('.starred', this.$ctx)
@@ -57,10 +57,15 @@
 				var id = $ctx.data('item-id');
 				_this.fire('toggleItemStarred', { id: id }, ['myTodoChannel']);
 			});
-			
-			
-			
 
+			// Toggle Delte State of ToDo Item 
+			var $icontrash = this.$ctx.find('.icontrash');
+			$icontrash.on('click', function (ev) {
+				var id = $ctx.data('item-id');
+				_this.fire('toggleItemDeleted', { id: id, ev: ev }, ['myTodoChannel']);
+				_this.fire('updateTrashCounter', {}, ['myTodoChannel']);
+				
+			});
 
 			// Start Editing: Replace Label with Inputfield
 			$label.on('dblclick', function () {

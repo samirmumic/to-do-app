@@ -1,7 +1,11 @@
 <div class="todolist"></div>
-<h3 class="masked hide h3masked">Deleted Items</h3>
-<div class="deletedlist hide"></div>
-
+		
+<div class="deletedlistcontainer hide">
+<h3 class="masked h3masked">Deleted Items</h3>
+<input type="button" class="clearlistbutton " value="Clear List">
+<div class="deletedlist"></div>
+</div>
+		
 <?php module('TodoItem', 'template', 'template') ?>
 
 	<script id="todoitem" type="text/x-dot-template">

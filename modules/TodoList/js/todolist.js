@@ -25,7 +25,7 @@
 			this.$todoList = $ctx.find('.todolist');
 			this.$deletedList = $ctx.find('.deletedlist');
 
-			this.itemsDataKey = 'todoitems4';
+			this.itemsDataKey = 'todoitems';
 			this.itemsData = [];
 
 			this.restoreData();
@@ -39,7 +39,7 @@
 				starred: parseInt('001', 2)
 			};
 
-
+			this.onClearTrash = $.proxy(this.onClearTrash, this);
 		},
 
 		/**
@@ -55,6 +55,9 @@
 
 			this.renderAllItems();
 			this.renderDeletedItems();
+			this.updateTrashCounter();
+
+			$('.clearlistbutton').on('click', this.onClearTrash);
 
 
 			callback();
@@ -69,9 +72,12 @@
 			var item = this.itemFactory(data.text);
 			this.addItem(item);
 
-			this.renderItem(item);
+			this.renderItem(item, this.$todoList);
 		},
-
+		onClearTrash: function () {
+			this.removeDeletedList();
+			this.clearTrash();
+		},
 		onToggleItemDone: function (data) {
 			var item = this.getItem(data.id);
 			this.toggleItemDone(item);
@@ -85,6 +91,35 @@
 		onSetItemDeleted: function (data) {
 			var item = this.getItem(data.id);
 			this.setItemDeleted(item);
+
+			this.renderItem(item, this.$deletedList);
+		},
+
+		onToggleDeletedList: function () {
+			var $deletedlistcon = $('.deletedlistcontainer');
+			$deletedlistcon.toggleClass('hide');
+		},
+		onUpdateTrashCounter: function () {
+			this.updateTrashCounter();
+		},
+
+		onToggleItemDeleted: function (data) {
+
+			var item = this.getItem(data.id),
+				$item = $(data.ev.currentTarget).closest('.mod-todo-item')
+				;
+
+
+			this.toggleItemDeleted(item);
+
+			if (!this.isItemDeleted(item)) {
+				this.renderItem(item, this.$todoList);
+			} else {
+				this.renderItem(item, this.$deletedList);
+			}
+
+			$item.remove();
+
 		},
 
 		/**
@@ -114,6 +149,10 @@
 		addItem: function (item) {
 			this.itemsData.push(item);
 			this.saveData();
+		},
+
+		deleteItem: function (id) {
+			this.itemsData.splice(id, 1);
 		},
 
 		/**
@@ -178,6 +217,7 @@
 		},
 
 		setItemDeleted: function (item) {
+
 			this.setItemStatus(item, 'deleted');
 		},
 
@@ -189,11 +229,60 @@
 			this.flipItemStatus(item, 'deleted');
 		},
 
+		clearTrash: function () {
+			var i = 0,
+				current,
+				dataLen = this.itemsData.length,
+				cloneData = []
+				;
+
+			for (i; i < dataLen; i++) {
+
+				current = this.itemsData[i];
+
+				if (current && !this.isItemDeleted(current)) {
+					cloneData.push(this.itemsData[i]);
+				}
+			}
+			this.itemsData = cloneData;
+			this.saveData();
+		},
+
+		removeDeletedList: function () {
+			$('.deletedlist .mod-todo-item').remove();
+		},
+
+		getTrashAmount: function () {
+			var i = 0,
+				current,
+				dataLen = this.itemsData.length,
+				deletedItems = 0
+				;
+
+			for (i; i < dataLen; i++) {
+
+				current = this.itemsData[i];
+
+				if (current && this.isItemDeleted(current)) {
+					deletedItems++;
+				}
+			}
+			
+			return deletedItems;
+		},
+
+
+		updateTrashCounter: function () {
+			var deletedItems = this.getTrashAmount();
+			this.fire('setCounter', { amount: deletedItems }, ['myTodoChannel']);
+		},
+
 		isItemStatus: function (item, statusName) {
 			return (item.status & this.statusMask[statusName]) ? true : false;
 		},
 
 		setItemStatus: function (item, statusName) {
+			console.log(item);
 			item.status = (item.status | this.statusMask[statusName]);
 			this.saveData();
 		},
@@ -210,12 +299,14 @@
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		/**
+		 * @param item
+		 * @param $list List to add item (todolist or deleted list)
+		 */
 		renderItem: function (item, $list) {
 			var tmplData = {
 				title: item.title,
-				id: item.id,
-				isDone: this.isItemDone(item)
+				id: item.id
 			};
 
 			// Run template

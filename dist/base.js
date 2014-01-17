@@ -25007,7 +25007,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		init: function ($ctx, sandbox, modId) {
 			// call base constructor
 			this._super($ctx, sandbox, modId);
-			
+
 			// subscribe to the channel
 			this.sandbox.subscribe('myTodoChannel', this);
 		},
@@ -25021,19 +25021,27 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 */
 		on: function (callback) {
 
-			var  mod = this,
+			var mod = this,
 				$btn = $('.btn', this.$ctx),
 				$input = $('.input', this.$ctx)
-			;
+				;
 
 			$btn.on('click', function (ev) {
-				
+
 				ev.preventDefault();
-				
+
 				// fire event to another module
-				mod.fire('addTodo', { text : $input.val() }, ['myTodoChannel'], function() {
+				mod.fire('addTodo', { text: $input.val() }, ['myTodoChannel'], function () {
 					console.log('Fired!');
 				});
+			});
+			
+			$(document).keyup(function (e) {
+				if (e.keyCode == 13) {
+					mod.fire('addTodo', { text: $input.val() }, ['myTodoChannel'], function () {
+					console.log('Fired!');
+					});
+				}
 			});
 
 			callback();
@@ -25046,7 +25054,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 * @return void
 		 */
 		after: function () {
-			
+
 		}
 	});
 })(Tc.$);
@@ -25085,7 +25093,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 */
 		on: function (callback) {
 
-			var $ctx = this.$ctx    
+			var $ctx = this.$ctx
 				, $label = $('.item-label', this.$ctx)
 				, $checkbox = $('.item-checkbox', this.$ctx)
 				, $starred = $('.starred', this.$ctx)
@@ -25109,10 +25117,15 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 				var id = $ctx.data('item-id');
 				_this.fire('toggleItemStarred', { id: id }, ['myTodoChannel']);
 			});
-			
-			
-			
 
+			// Toggle Delte State of ToDo Item 
+			var $icontrash = this.$ctx.find('.icontrash');
+			$icontrash.on('click', function (ev) {
+				var id = $ctx.data('item-id');
+				_this.fire('toggleItemDeleted', { id: id, ev: ev }, ['myTodoChannel']);
+				_this.fire('updateTrashCounter', {}, ['myTodoChannel']);
+				
+			});
 
 			// Start Editing: Replace Label with Inputfield
 			$label.on('dblclick', function () {
@@ -25201,7 +25214,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			this.$todoList = $ctx.find('.todolist');
 			this.$deletedList = $ctx.find('.deletedlist');
 
-			this.itemsDataKey = 'todoitems4';
+			this.itemsDataKey = 'todoitems';
 			this.itemsData = [];
 
 			this.restoreData();
@@ -25215,7 +25228,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 				starred: parseInt('001', 2)
 			};
 
-
+			this.onClearTrash = $.proxy(this.onClearTrash, this);
 		},
 
 		/**
@@ -25231,6 +25244,9 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 
 			this.renderAllItems();
 			this.renderDeletedItems();
+			this.updateTrashCounter();
+
+			$('.clearlistbutton').on('click', this.onClearTrash);
 
 
 			callback();
@@ -25245,9 +25261,12 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			var item = this.itemFactory(data.text);
 			this.addItem(item);
 
-			this.renderItem(item);
+			this.renderItem(item, this.$todoList);
 		},
-
+		onClearTrash: function () {
+			this.removeDeletedList();
+			this.clearTrash();
+		},
 		onToggleItemDone: function (data) {
 			var item = this.getItem(data.id);
 			this.toggleItemDone(item);
@@ -25261,6 +25280,35 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		onSetItemDeleted: function (data) {
 			var item = this.getItem(data.id);
 			this.setItemDeleted(item);
+
+			this.renderItem(item, this.$deletedList);
+		},
+
+		onToggleDeletedList: function () {
+			var $deletedlistcon = $('.deletedlistcontainer');
+			$deletedlistcon.toggleClass('hide');
+		},
+		onUpdateTrashCounter: function () {
+			this.updateTrashCounter();
+		},
+
+		onToggleItemDeleted: function (data) {
+
+			var item = this.getItem(data.id),
+				$item = $(data.ev.currentTarget).closest('.mod-todo-item')
+				;
+
+
+			this.toggleItemDeleted(item);
+
+			if (!this.isItemDeleted(item)) {
+				this.renderItem(item, this.$todoList);
+			} else {
+				this.renderItem(item, this.$deletedList);
+			}
+
+			$item.remove();
+
 		},
 
 		/**
@@ -25290,6 +25338,10 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		addItem: function (item) {
 			this.itemsData.push(item);
 			this.saveData();
+		},
+
+		deleteItem: function (id) {
+			this.itemsData.splice(id, 1);
 		},
 
 		/**
@@ -25354,6 +25406,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		},
 
 		setItemDeleted: function (item) {
+
 			this.setItemStatus(item, 'deleted');
 		},
 
@@ -25365,11 +25418,60 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 			this.flipItemStatus(item, 'deleted');
 		},
 
+		clearTrash: function () {
+			var i = 0,
+				current,
+				dataLen = this.itemsData.length,
+				cloneData = []
+				;
+
+			for (i; i < dataLen; i++) {
+
+				current = this.itemsData[i];
+
+				if (current && !this.isItemDeleted(current)) {
+					cloneData.push(this.itemsData[i]);
+				}
+			}
+			this.itemsData = cloneData;
+			this.saveData();
+		},
+
+		removeDeletedList: function () {
+			$('.deletedlist .mod-todo-item').remove();
+		},
+
+		getTrashAmount: function () {
+			var i = 0,
+				current,
+				dataLen = this.itemsData.length,
+				deletedItems = 0
+				;
+
+			for (i; i < dataLen; i++) {
+
+				current = this.itemsData[i];
+
+				if (current && this.isItemDeleted(current)) {
+					deletedItems++;
+				}
+			}
+			
+			return deletedItems;
+		},
+
+
+		updateTrashCounter: function () {
+			var deletedItems = this.getTrashAmount();
+			this.fire('setCounter', { amount: deletedItems }, ['myTodoChannel']);
+		},
+
 		isItemStatus: function (item, statusName) {
 			return (item.status & this.statusMask[statusName]) ? true : false;
 		},
 
 		setItemStatus: function (item, statusName) {
+			console.log(item);
 			item.status = (item.status | this.statusMask[statusName]);
 			this.saveData();
 		},
@@ -25386,12 +25488,14 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+		/**
+		 * @param item
+		 * @param $list List to add item (todolist or deleted list)
+		 */
 		renderItem: function (item, $list) {
 			var tmplData = {
 				title: item.title,
-				id: item.id,
-				isDone: this.isItemDone(item)
+				id: item.id
 			};
 
 			// Run template
@@ -25484,13 +25588,14 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 
 			var _this = this,
 				$deletedList = $('.deletedlist'),
+				$clearbutton = $('.clearlistbutton'),
 				$title = $('.h3masked');
 
 			// Delete item 
 			$('#trash').sortable({
 
 				update: function (event, ui) {
-					ui.item.hide();
+					ui.item.remove();
 
 					// Remove from the HTML
 					//$('.mod-todo-item', this).remove();
@@ -25501,17 +25606,16 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 					_this.fire('setItemDeleted', { id: id }, ['myTodoChannel']);
 				}
 			});
-
 			
 
 			$('.todolist').sortable({
 				cursor: 'move',
 				connectWith: '#trash'
 			});
-
+			
+			// Shows the deleted List 
 			$('#trash').on('click', function () {
-				$deletedList.removeClass('hide');
-				$title.removeClass('hide');
+				_this.fire('toggleDeletedList', {}, ['myTodoChannel']);
 			});
 
 			callback();
@@ -25524,6 +25628,10 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 * @return void
 		 */
 		after: function () {
+		},
+		
+		onSetCounter: function (data){
+			$('.counter').text(data.amount);
 		}
 	});
 })(Tc.$);
