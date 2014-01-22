@@ -33,10 +33,7 @@
 		 */
 		on: function (callback) {
 
-			var _this = this,
-				$deletedList = $('.deletedlist'),
-				$clearbutton = $('.clearlistbutton'),
-				$title = $('.h3masked');
+			var _this = this;
 
 			// Delete item 
 			$('#trash').sortable({
@@ -78,7 +75,8 @@
 		},
 		
 		onSetCounter: function (data){
-			$('.counter').text(data.amount);
+			// Shows counter bubble if its greater then 0 
+			$('.counter').toggle(!  !data.amount).text(data.amount);
 		}
 	});
 })(Tc.$);

@@ -552,12 +552,19 @@ table {
   border-spacing: 0;
 }
 
+/*Mask Mixin */
+
+/*Rotate Mixin */
+
+/*Transition Mixin */
+
 body {
-  font-family: 'Roboto';
+  font-family: 'Josefin Sans', sans-serif;
+  background-image: url("/assets/img/bg3.png");
 }
 
 h1 {
-  font-size: 120px;
+  font-size: 140px;
   font-weight: bolder;
   text-align: center;
   color: #ff3f57;
@@ -571,14 +578,34 @@ h3 {
 }
 
 .masked {
-  background: url(/assets/img/red.jpg) repeat, #ffffff;
+  color: #a90200;
+  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%, #e22b2a), color-stop(100%, #9b0000));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(45deg, #e22b2a 0%, #9b0000 100%);
+  /* Chrome10+,Safari5.1+ */
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
+}
+
+@media (max-width: 1220px) {
+  .trash {
+    display: none;
+  }
+}
+
+@media (max-width: 1030px) {
+  .counter {
+    display: none !important;
+  }
 }
 
 @media (max-width: 680px) {
   h1 {
     font-size: 60px;
+  }
+
+  .trash {
+    display: none;
   }
 }
 
@@ -609,15 +636,17 @@ h3 {
 
 .mod-create-todo-item .btn {
   margin-left: 10px;
-  background-color: #e8e8e8;
+  background-color: rgba(211, 211, 211, 0.59);
   border: none;
   padding: 5px 10px 5px 10px;
-  -webkit-transition: background-color 0.5s ease;
+  -webkit-transition: all 1s ease;
+  transiton: all 1s ease;
+  color: #a50b0b;
   transition: background-color 0.5s ease;
 }
 
 .mod-create-todo-item .btn:hover {
-  background-color: #c6c6c6;
+  background-color: rgba(139, 131, 135, 0.5);
 }
 
 .mod-layout {
@@ -649,8 +678,11 @@ h3 {
   background: white;
   border: 7px solid #e8e8e8;
   border-radius: 5px;
-  -webkit-transition: border-color 0.6s ease;
-  transition: border-color 0.6s ease;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transiton: all 1s ease;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -682,6 +714,7 @@ h3 {
 
 .mod-todo-item .item-label {
   cursor: pointer;
+  font-size: 17px;
 }
 
 .mod-todo-item .edit-inputfield {
@@ -717,15 +750,19 @@ h3 {
 .clearlistbutton {
   width: 120px;
   padding: 5px 15px;
-  background-color: transparent;
-  border: 5px solid rgba(216, 216, 216, 0.68);
-  border-radius: 5px;
-  -webkit-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+  margin-left: 10px;
+  background-color: rgba(211, 211, 211, 0.59);
+  border: none;
+  color: #a50b0b;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transiton: all 1s ease;
 }
 
 .clearlistbutton:hover {
-  color: #ce1c1a;
+  background-color: rgba(139, 131, 135, 0.5);
 }
 
 .deletedlist .icontrash {
@@ -744,19 +781,22 @@ h3 {
   bottom: -10px;
   background-color: transparent;
   z-index: 99;
+  cursor: pointer;
 }
 
-.mod-trash .trash:hover:hover .balk1,
-.mod-trash .trash:hover:hover .balk2,
-.mod-trash .trash:hover:hover .balk3,
-.mod-trash .trash:hover:hover .balk4,
-.mod-trash .trash:hover:hover .balk5 {
+.mod-trash .trash:hover .balk1,
+.mod-trash .trash:hover .balk2,
+.mod-trash .trash:hover .balk3,
+.mod-trash .trash:hover .balk4,
+.mod-trash .trash:hover .balk5 {
   background-color: rgba(193, 193, 192, 0.9);
 }
 
-.mod-trash .trash:hover:hover .balk5 {
-  bottom: 85px;
+.mod-trash .trash:hover .balk5 {
   -webkit-transform: rotate(110deg);
+  -ms-transform: rotate(110deg);
+  transform: rotate(110deg);
+  bottom: 85px;
 }
 
 .mod-trash .balk1,
@@ -764,14 +804,17 @@ h3 {
 .mod-trash .balk3,
 .mod-trash .balk4,
 .mod-trash .balk5 {
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+  transiton: all 1s ease;
   height: 50px;
   width: 7px;
   background-color: rgba(193, 193, 192, 0.5);
   position: fixed;
   bottom: 40px;
   right: 195px;
-  -webkit-transition: all 1s ease;
-  transition: all 1s ease;
 }
 
 .mod-trash .balk2 {
@@ -785,15 +828,32 @@ h3 {
 }
 
 .mod-trash .balk4 {
-  bottom: -5px;
   -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  bottom: -5px;
   height: 60px;
   right: 170px;
 }
 
 .mod-trash .balk5 {
-  bottom: 75px;
   -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  bottom: 75px;
   height: 60px;
   right: 170px;
+}
+
+.counter {
+  position: fixed;
+  background-color: rgba(178, 178, 178, 0.59);
+  color: white;
+  width: 15px;
+  height: 13px;
+  padding: 15px;
+  padding-left: 20px;
+  border-radius: 90px;
+  right: 60px;
+  bottom: 20px;
 }

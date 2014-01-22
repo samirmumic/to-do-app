@@ -25213,6 +25213,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 
 			this.$todoList = $ctx.find('.todolist');
 			this.$deletedList = $ctx.find('.deletedlist');
+			this.$deletedlistcon = $ctx.find('.deletedlistcontainer');
 
 			this.itemsDataKey = 'todoitems';
 			this.itemsData = [];
@@ -25266,6 +25267,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		onClearTrash: function () {
 			this.removeDeletedList();
 			this.clearTrash();
+			this.updateTrashCounter();
 		},
 		onToggleItemDone: function (data) {
 			var item = this.getItem(data.id);
@@ -25285,8 +25287,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		},
 
 		onToggleDeletedList: function () {
-			var $deletedlistcon = $('.deletedlistcontainer');
-			$deletedlistcon.toggleClass('hide');
+			this.$deletedlistcon.toggleClass('hide');
 		},
 		onUpdateTrashCounter: function () {
 			this.updateTrashCounter();
@@ -25586,10 +25587,7 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		 */
 		on: function (callback) {
 
-			var _this = this,
-				$deletedList = $('.deletedlist'),
-				$clearbutton = $('.clearlistbutton'),
-				$title = $('.h3masked');
+			var _this = this;
 
 			// Delete item 
 			$('#trash').sortable({
@@ -25631,7 +25629,8 @@ Modernizr.load=function(){yepnope.apply(window,[].slice.call(arguments,0));};
 		},
 		
 		onSetCounter: function (data){
-			$('.counter').text(data.amount);
+			// Shows counter bubble if its greater then 0 
+			$('.counter').toggle(!  !data.amount).text(data.amount);
 		}
 	});
 })(Tc.$);

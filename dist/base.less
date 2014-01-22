@@ -528,53 +528,125 @@ table {
 
 @blue: #0000FF;
 
-	
+@c-red: #e22b2a;
+@c-red-dark: #a90200;
+@c-red-dark2: #9b0000;
 
-	body {
-		font-family: 'Roboto'; 
+
+/////////////////////////////////////////////////////////////////////////////////////
+/*Mask Mixin */
+
+.maskedbg(@color, @colorLeft, @colorRight) {
+	color: @color;
+
+	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,@colorLeft), color-stop(100%,@colorRight)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(45deg, @colorLeft 0%,@colorRight 100%); /* Chrome10+,Safari5.1+ */
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+}
+
+.maskedbg-red() {
+	.maskedbg(@c-red-dark, @c-red, @c-red-dark2);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/*Rotate Mixin */
+
+.rotate(@deg){
+	-webkit-transform: rotate(@deg);
+	-moz-transform: rotate(@deg);
+	-ms-transform: rotate(@deg);
+	-o-transform: rotate(@deg);
+	transform: rotate(@deg);
+}
+
+.rotate-balk5() {
+	.rotate(110deg);
+}
+
+.rotate-balk4() {
+	.rotate(90deg);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+/*Transition Mixin */
+
+.trasition(@what, @howlong, @speed) {
+	-webkit-transition:@what @howlong @speed;
+	-moz-transition:@what @howlong @speed;
+	-ms-transition:@what @howlong @speed;
+	-o-transition:@what @howlong @speed;
+	transiton: @what @howlong @speed;
+}
+
+.transition-simple() {
+	.trasition(all, 1s, ease);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+body {
+	font-family: 'Josefin Sans', sans-serif;
+	background-image: url("/assets/img/bg3.png");
+}
+
+h1 {
+	font-size: 140px;
+	font-weight: bolder;
+	text-align: center;
+	color: #ff3f57;
+}
+
+h3 {
+	font-size: 40px;
+	font-weight: bolder;
+	text-align: center;
+	color: #ff3f57;
+}
+
+.masked {
+	.maskedbg-red();
+}
+
+@media (max-width: 1220px) {
+
+	.trash {
+		display: none;
 	}
-	h1 {
-		font-size: 120px;
-		font-weight: bolder;
-		text-align: center;
-		color: #ff3f57;
-	}
-	
-	h3 {
-			font-size: 40px;
-			font-weight: bolder;
-			text-align: center;
-			color: #ff3f57;
-	}
-	.masked{
-		background: url(/assets/img/red.jpg) repeat, white;
-		-webkit-text-fill-color: transparent;
-		-webkit-background-clip: text;
-	}
-	
-	
-	@media (max-width: 680px) {
-					
-		h1 {
-			font-size: 60px;
-		}
-	}
-	
-	@media (max-width: 440px) {
-						
-		h1 {
-			font-size: 40px;
-		}
-		
-		h3 {
-			font-size: 30px;
-		}
-	}
-	
-	
-	.hide {
+}
+@media (max-width: 1030px) {
+
+	.counter {
 		display: none !important;
 	}
+}
+
+@media (max-width: 680px) {
+
+	h1 {
+		font-size: 60px;
+	}
+
+	.trash {
+		display: none;
+	}
+}
+
+@media (max-width: 440px) {
+
+	h1 {
+		font-size: 40px;
+	}
+
+	h3 {
+		font-size: 30px;
+	}
+}
+
+.hide {
+	display: none !important;
+}
 
 .mod-create-todo-item{
 
@@ -589,12 +661,15 @@ table {
 	}
 	.btn {
 		margin-left: 10px;
-		background-color: #e8e8e8;
+		background-color: rgba(211, 211, 211, 0.59);
 		border: none;
 		padding: 5px 10px 5px 10px;
+		.transition-simple();
+		color: rgb(165, 11, 11);
+		
 		transition: background-color 0.5s ease;
 		&:hover {
-			background-color: #c6c6c6;
+			background-color: rgba(139, 131, 135, 0.50);
 		}
 	}
 }
@@ -630,7 +705,7 @@ table {
 		background: white;
 		border: 7px solid #e8e8e8;
 		border-radius: 5px;
-		transition: border-color 0.6s ease;
+		.transition-simple();
 		overflow: hidden;
 		white-space: nowrap;
 		&:first-child {
@@ -661,6 +736,7 @@ table {
 
 	.item-label {
 		cursor: pointer;
+		font-size: 17px;
 	}
 
 	.edit-inputfield {
@@ -682,6 +758,7 @@ table {
 	top: -449px;
 	right: -415px;
 }
+
 .icontrash {
 	background-image: url('/assets/img/icontrash.png');
 	height: 15px;
@@ -694,14 +771,17 @@ table {
 .clearlistbutton {
 	width: 120px;
 	padding: 5px 15px;
-	background-color: transparent;
-	border: 5px solid rgba(216, 216, 216, 0.68);
-	border-radius: 5px;
-	transition: all 0.5s ease;
+	margin-left: 10px;
+	background-color: rgba(211, 211, 211, 0.59);
+	border: none;
+	color: rgb(165, 11, 11);
+	.transition-simple();
 	&:hover {
-		color: #ce1c1a;
+		background-color: rgba(139, 131, 135, 0.50);
 	}
 }
+
+
 
 .deletedlist {
 	.icontrash {
@@ -721,7 +801,7 @@ table {
 		bottom: -10px;
 		background-color: transparent;
 		z-index: 99;
-		&:hover {
+		cursor: pointer;
 
 			&:hover {
 				.balk1,
@@ -732,24 +812,23 @@ table {
 					background-color: rgba(193, 193, 192, 0.9);
 				}
 				.balk5 {
+					.rotate-balk5();
 					bottom: 85px;
-					-webkit-transform: rotate(110deg);
 				}
 			}
-		}
 	}
 	.balk1,
 	.balk2,
 	.balk3,
 	.balk4,
 	.balk5 {
+		.transition-simple();
 		height: 50px;
 		width: 7px;
 		background-color: rgba(193, 193, 192, 0.5);
 		position: fixed;
 		bottom: 40px;
 		right: 195px;
-		transition: all 1s ease;
 	}
 	.balk2 {
 		right: 170px;
@@ -760,17 +839,28 @@ table {
 		bottom: 40px;
 	}
 	.balk4 {
+		.rotate-balk4();
 		bottom: -5px;
-		-webkit-transform: rotate(90deg);
 		height: 60px;
 		right: 170px;
 	}
 	.balk5 {
+		.rotate-balk4();
 		bottom: 75px;
-		-webkit-transform: rotate(90deg);
 		height: 60px;
 		right: 170px;
-
 	}
 
+}
+.counter {
+	position: fixed;
+	background-color: rgba(178, 178, 178, 0.59);
+	color: white;
+	width: 15px;
+	height: 13px;
+	padding: 15px;
+	padding-left: 20px;
+	border-radius: 90px;
+	right: 60px;
+	bottom: 20px;
 }

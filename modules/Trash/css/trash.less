@@ -7,7 +7,7 @@
 		bottom: -10px;
 		background-color: transparent;
 		z-index: 99;
-		&:hover {
+		cursor: pointer;
 
 			&:hover {
 				.balk1,
@@ -18,24 +18,23 @@
 					background-color: rgba(193, 193, 192, 0.9);
 				}
 				.balk5 {
+					.rotate-balk5();
 					bottom: 85px;
-					-webkit-transform: rotate(110deg);
 				}
 			}
-		}
 	}
 	.balk1,
 	.balk2,
 	.balk3,
 	.balk4,
 	.balk5 {
+		.transition-simple();
 		height: 50px;
 		width: 7px;
 		background-color: rgba(193, 193, 192, 0.5);
 		position: fixed;
 		bottom: 40px;
 		right: 195px;
-		transition: all 1s ease;
 	}
 	.balk2 {
 		right: 170px;
@@ -46,17 +45,28 @@
 		bottom: 40px;
 	}
 	.balk4 {
+		.rotate-balk4();
 		bottom: -5px;
-		-webkit-transform: rotate(90deg);
 		height: 60px;
 		right: 170px;
 	}
 	.balk5 {
+		.rotate-balk4();
 		bottom: 75px;
-		-webkit-transform: rotate(90deg);
 		height: 60px;
 		right: 170px;
-
 	}
 
+}
+.counter {
+	position: fixed;
+	background-color: rgba(178, 178, 178, 0.59);
+	color: white;
+	width: 15px;
+	height: 13px;
+	padding: 15px;
+	padding-left: 20px;
+	border-radius: 90px;
+	right: 60px;
+	bottom: 20px;
 }

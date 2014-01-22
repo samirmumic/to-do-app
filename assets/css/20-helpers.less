@@ -1,0 +1,53 @@
+
+/////////////////////////////////////////////////////////////////////////////////////
+/*Mask Mixin */
+
+.maskedbg(@color, @colorLeft, @colorRight) {
+	color: @color;
+
+	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,@colorLeft), color-stop(100%,@colorRight)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(45deg, @colorLeft 0%,@colorRight 100%); /* Chrome10+,Safari5.1+ */
+	-webkit-text-fill-color: transparent;
+	-webkit-background-clip: text;
+}
+
+.maskedbg-red() {
+	.maskedbg(@c-red-dark, @c-red, @c-red-dark2);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+/*Rotate Mixin */
+
+.rotate(@deg){
+	-webkit-transform: rotate(@deg);
+	-moz-transform: rotate(@deg);
+	-ms-transform: rotate(@deg);
+	-o-transform: rotate(@deg);
+	transform: rotate(@deg);
+}
+
+.rotate-balk5() {
+	.rotate(110deg);
+}
+
+.rotate-balk4() {
+	.rotate(90deg);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////
+/*Transition Mixin */
+
+.trasition(@what, @howlong, @speed) {
+	-webkit-transition:@what @howlong @speed;
+	-moz-transition:@what @howlong @speed;
+	-ms-transition:@what @howlong @speed;
+	-o-transition:@what @howlong @speed;
+	transiton: @what @howlong @speed;
+}
+
+.transition-simple() {
+	.trasition(all, 1s, ease);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////

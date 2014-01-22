@@ -24,6 +24,7 @@
 
 			this.$todoList = $ctx.find('.todolist');
 			this.$deletedList = $ctx.find('.deletedlist');
+			this.$deletedlistcon = $ctx.find('.deletedlistcontainer');
 
 			this.itemsDataKey = 'todoitems';
 			this.itemsData = [];
@@ -77,6 +78,7 @@
 		onClearTrash: function () {
 			this.removeDeletedList();
 			this.clearTrash();
+			this.updateTrashCounter();
 		},
 		onToggleItemDone: function (data) {
 			var item = this.getItem(data.id);
@@ -96,8 +98,7 @@
 		},
 
 		onToggleDeletedList: function () {
-			var $deletedlistcon = $('.deletedlistcontainer');
-			$deletedlistcon.toggleClass('hide');
+			this.$deletedlistcon.toggleClass('hide');
 		},
 		onUpdateTrashCounter: function () {
 			this.updateTrashCounter();

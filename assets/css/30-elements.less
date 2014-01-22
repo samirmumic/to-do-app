@@ -1,48 +1,62 @@
 
-	
+body {
+	font-family: 'Josefin Sans', sans-serif;
+	background-image: url("/assets/img/bg3.png");
+}
 
-	body {
-		font-family: 'Roboto'; 
+h1 {
+	font-size: 140px;
+	font-weight: bolder;
+	text-align: center;
+	color: #ff3f57;
+}
+
+h3 {
+	font-size: 40px;
+	font-weight: bolder;
+	text-align: center;
+	color: #ff3f57;
+}
+
+.masked {
+	.maskedbg-red();
+}
+
+@media (max-width: 1220px) {
+
+	.trash {
+		display: none;
 	}
-	h1 {
-		font-size: 120px;
-		font-weight: bolder;
-		text-align: center;
-		color: #ff3f57;
-	}
-	
-	h3 {
-			font-size: 40px;
-			font-weight: bolder;
-			text-align: center;
-			color: #ff3f57;
-	}
-	.masked{
-		background: url(/assets/img/red.jpg) repeat, white;
-		-webkit-text-fill-color: transparent;
-		-webkit-background-clip: text;
-	}
-	
-	
-	@media (max-width: 680px) {
-					
-		h1 {
-			font-size: 60px;
-		}
-	}
-	
-	@media (max-width: 440px) {
-						
-		h1 {
-			font-size: 40px;
-		}
-		
-		h3 {
-			font-size: 30px;
-		}
-	}
-	
-	
-	.hide {
+}
+@media (max-width: 1030px) {
+
+	.counter {
 		display: none !important;
 	}
+}
+
+@media (max-width: 680px) {
+
+	h1 {
+		font-size: 60px;
+	}
+
+	.trash {
+		display: none;
+	}
+}
+
+@media (max-width: 440px) {
+
+	h1 {
+		font-size: 40px;
+	}
+
+	h3 {
+		font-size: 30px;
+	}
+}
+
+.hide {
+	display: none !important;
+}
