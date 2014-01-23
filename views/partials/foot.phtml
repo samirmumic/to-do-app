@@ -1,16 +1,20 @@
-
-<? if (APP_ENV == 'dev'): ?>
-	<script src="dist/base.js"></script>
-<? else: ?>
-	<script src="dist/base.min.js"></script>
-<? endif; ?>
-
 <script>
-(function($) {
-    $(document).ready(function() {
-        var application = new Tc.Application($('body'), {});
-        application.registerModules();
-        application.start();
-    });
-})(Tc.$);
+	function tc_bootstrap() {
+		(function ($) {
+			$(document).ready(function () {
+				var application = new Tc.Application($('body'), {});
+				application.registerModules();
+				application.start();
+			});
+		})(Tc.$);
+	}
+
+	Modernizr.load([
+		{
+			test: Modernizr.json,
+			nope: '/assets/lib/json2.min.js',
+			load: <? if (APP_ENV == 'dev'): ?>"dist/base.js"<? else: ?>"dist/base.min.js"<? endif; ?>,
+			complete: tc_bootstrap
+		}
+	]);
 </script>
