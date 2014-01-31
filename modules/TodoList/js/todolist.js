@@ -35,11 +35,11 @@
 			this.sandbox.subscribe('myTodoChannel', this);
 
 			this.statusMask = {
-				done: parseInt('100', 2),
-				deleted: parseInt('010', 2),
-				starred: parseInt('001', 2)
-			};
-
+				starred: '001',
+				deleted: '010',
+				done: '100'
+			};	
+			
 			this.onClearTrash = $.proxy(this.onClearTrash, this);
 		},
 
@@ -70,6 +70,7 @@
 		 * @param data
 		 */
 		onAddTodo: function (data) {
+
 			var item = this.itemFactory(data.text);
 			this.addItem(item);
 
@@ -143,11 +144,12 @@
 		restoreData: function () {
 			var data = JSON.parse(localStorage.getItem(this.itemsDataKey));
 			if (data !== null) {
-				this.itemsData = data;
+				this.itemsData = data;				
 			}
 		},
 
 		addItem: function (item) {
+
 			this.itemsData.push(item);
 			this.saveData();
 		},
@@ -177,7 +179,7 @@
 			return {
 				title: title,
 				id: this.generateUUID(),
-				status: 0
+				status: 000
 			};
 		},
 
@@ -218,7 +220,6 @@
 		},
 
 		setItemDeleted: function (item) {
-
 			this.setItemStatus(item, 'deleted');
 		},
 
@@ -268,7 +269,7 @@
 					deletedItems++;
 				}
 			}
-			
+
 			return deletedItems;
 		},
 
@@ -283,7 +284,6 @@
 		},
 
 		setItemStatus: function (item, statusName) {
-			console.log(item);
 			item.status = (item.status | this.statusMask[statusName]);
 			this.saveData();
 		},
@@ -307,10 +307,34 @@
 		renderItem: function (item, $list) {
 			var tmplData = {
 				title: item.title,
-				id: item.id
+				id: item.id,
+				status: item.status
 			};
+			
+			if (this.isItemStatus(item, 'starred')) {
+				tmplData.isStarred = true
+			} else {
+				tmplData.isStarred = false;
+			}
 
-			// Run template
+			if (this.isItemStatus(item, 'done')) {
+				tmplData.isDone = true
+			} else {
+				tmplData.isDone = false;
+			}
+
+			if (this.isItemStatus(item, 'done') && this.isItemStatus(item, 'starred')) {
+				tmplData.isDone = true
+				tmplData.isStarred = true;
+			}
+			
+			if (this.isItemStatus(item, 'done') && this.isItemStatus(item, 'starred') && this.isItemStatus(item, 'deleted')) {
+				tmplData.isDone = true
+				tmplData.isStarred = true;
+				tmplData.isDeleted = true;
+			}
+
+			// Run template			
 			var html = this.tmplItem(tmplData),
 				$newItem = $(html)
 				;
@@ -325,9 +349,11 @@
 		},
 
 		renderAllItems: function () {
+
 			var i,
 				l = this.itemsData.length
 				;
+
 			for (i = 0; i < l; i++) {
 				var item = this.itemsData[i];
 				if (!this.isItemDeleted(item)) {
