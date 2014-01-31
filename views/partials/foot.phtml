@@ -8,13 +8,18 @@
 			});
 		})(Tc.$);
 	}
-
+	
 	Modernizr.load([
 		{
-			test: Modernizr.json,
-			nope: '/assets/lib/json2.min.js',
-			load: <? if (APP_ENV == 'dev'): ?>"dist/base.js"<? else: ?>"dist/base.min.js"<? endif; ?>,
-			complete: tc_bootstrap
-		}
-	]);
+			test : Modernizr.json,
+			nope : ['/assets/lib/json2.min.js']
+		},
+		{
+			test : Modernizr.localstorage,
+			nope : ['/assets/lib/localStorage.js']
+		}, {
+			
+		load: <? if (APP_ENV == 'dev'): ?>"dist/base.js"<? else: ?>"dist/base.min.js"<? endif; ?>,
+		complete: tc_bootstrap
+	}]);
 </script>
