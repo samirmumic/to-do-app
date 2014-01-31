@@ -52,7 +52,7 @@
 		 */
 		on: function (callback) {
 			// Find and compile template
-			this.tmplItem = doT.template($('#todoitem').text());
+			this.tmplItem = doT.template($('#todoitem').html());
 
 			this.renderAllItems();
 			this.renderDeletedItems();
