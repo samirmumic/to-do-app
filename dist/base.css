@@ -789,8 +789,8 @@ h3 {
 .mod-trash .trash:hover .balk3,
 .mod-trash .trash:hover .balk4,
 .mod-trash .trash:hover .balk5 {
-  background-color: #535353;
-  background-color: rgba(193, 193, 192, 0.9);
+  background: #c1c1c0;
+  background: rgba(193, 193, 192, 0.9);
 }
 
 .mod-trash .trash:hover .balk5 {
@@ -812,8 +812,8 @@ h3 {
   transiton: all 1s ease;
   height: 50px;
   width: 7px;
-  background-color: #9f9f9f;
-  background-color: rgba(193, 193, 192, 0.5);
+  background: #c1c1c0;
+  background: rgba(193, 193, 192, 0.5);
   position: fixed;
   bottom: 40px;
   right: 195px;
@@ -847,10 +847,10 @@ h3 {
   right: 170px;
 }
 
-.counter {
+.mod-trash .counter {
   position: fixed;
-  background-color: #9f9f9f;
-  background-color: rgba(178, 178, 178, 0.59);
+  background: #b2b2b2;
+  background: rgba(178, 178, 178, 0.59);
   color: white;
   width: 15px;
   height: 13px;
